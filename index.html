@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Mejor Versión</title>
+<meta name="theme-color" content="#1FB57D">
+<meta name="description" content="Deja vicios y crea hábitos con rachas, logros y un pacto de honestidad.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mejor Versión">
+<style>
+@font-face{font-family:"Dela Gothic One";src:url(fonts/dela-gothic-one-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: one-column mobile app (max 620px): quote → your streaks list → active streak hero → actions → week → numbers → badges → share studio → pact + settings */
+:root{
+  --bg:#E6F2EB; --surface:#FFFFFF; --surface-2:#F2F8F4; --ink:#10231A; --muted:#58705F; --line:#CFE2D6;
+  --mint:#1FB57D; --mint-soft:#C9F0DD; --coral:#FF5A4E; --coral-soft:#FFE0DC; --butter:#FFC933; --butter-soft:#FFF1C4; --sky:#4C9BFF; --sky-soft:#DCEBFF;
+  --on-accent:#10231A; --shadow:0 1px 0 rgba(16,35,26,.06),0 8px 24px -12px rgba(16,35,26,.25);
+  --f-display:"Dela Gothic One","Arial Black",Impact,system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1813; --surface:#15241C; --surface-2:#1B2E24; --ink:#E8F4EC; --muted:#93AE9E; --line:#27402F;
+  --mint:#38D99A; --mint-soft:#163B2A; --coral:#FF6F63; --coral-soft:#3E1F1C; --butter:#FFD454; --butter-soft:#3A3217; --sky:#6DAEFF; --sky-soft:#18293F;
+  --on-accent:#0D1813; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1813; --surface:#15241C; --surface-2:#1B2E24; --ink:#E8F4EC; --muted:#93AE9E; --line:#27402F;
+  --mint:#38D99A; --mint-soft:#163B2A; --coral:#FF6F63; --coral-soft:#3E1F1C; --butter:#FFD454; --butter-soft:#3A3217; --sky:#6DAEFF; --sky-soft:#18293F;
+  --on-accent:#0D1813; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:18px 60px}
+.app{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:400;font-size:1.25rem;letter-spacing:.01em}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:10px}
+.hint{font-size:.85rem;color:var(--muted);margin:0}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--f-display);font-size:clamp(1.1rem,5.4vw,1.4rem);letter-spacing:-.01em;display:flex;align-items:center;gap:9px;white-space:nowrap}
+.mark{width:24px;height:24px;border-radius:6px;background:var(--mint);position:relative;transform:rotate(-8deg);flex:none}
+.mark::after{content:"";position:absolute;left:50%;top:26%;width:9px;height:9px;border-left:3px solid var(--on-accent);border-top:3px solid var(--on-accent);transform:translateX(-50%) rotate(45deg)}
+.lvl-chip{display:flex;align-items:center;gap:8px;flex:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 6px;font-weight:700;font-size:.9rem;white-space:nowrap}
+.lvl-chip b{display:grid;place-items:center;min-width:28px;height:28px;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--f-mono);font-size:.8rem}
+
+/* banner */
+.banner{background:var(--butter-soft);border:2px dashed var(--butter);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.banner p{margin:0}
+.banner.flash{animation:flash .6s ease 2}
+@keyframes flash{50%{transform:scale(1.02);border-color:var(--coral)}}
+
+/* quote */
+.install{background:var(--surface);border:2px solid var(--mint);border-radius:18px;padding:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.install-txt{display:flex;flex-direction:column;min-width:0;flex:1 1 200px;font-size:.92rem}
+.install-txt span{color:var(--muted)}
+.quote{background:var(--ink);color:var(--bg);border-radius:22px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.quote::after{content:"";position:absolute;right:-18px;top:-18px;width:90px;height:90px;border-radius:22px;background:var(--mint);opacity:.9;transform:rotate(18deg)}
+.quote .eyebrow{color:color-mix(in srgb,var(--bg) 70%,var(--ink));position:relative;z-index:1}
+.quote blockquote{margin:0;font-size:1.18rem;font-weight:700;line-height:1.35;max-width:32ch;position:relative;z-index:1;text-wrap:pretty}
+.quote button{align-self:flex-start;background:none;border:1px solid color-mix(in srgb,var(--bg) 40%,var(--ink));color:var(--bg);border-radius:999px;padding:5px 12px;font-size:.82rem;font-weight:700;position:relative;z-index:1}
+
+/* cards */
+.card{background:var(--surface);border-radius:22px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
+.card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* habit list */
+.hlist{display:flex;flex-direction:column;gap:8px}
+.hrow{display:flex;align-items:center;gap:12px;padding:10px;border-radius:16px;border:2px solid transparent;background:var(--surface-2)}
+.hrow.active{border-color:var(--ink)}
+.hsel{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left}
+.mono{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-size:1.1rem;flex:none;transform:rotate(-5deg);position:relative}
+.mono.quit::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;border-radius:2px;background:currentColor;opacity:.55;transform:rotate(-40deg)}
+.t0{background:var(--mint);color:var(--on-accent)} .t1{background:var(--butter);color:var(--on-accent)} .t2{background:var(--coral);color:#fff} .t3{background:var(--sky);color:var(--on-accent)}
+.hinfo{min-width:0;display:flex;flex-direction:column}
+.hname{font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.hmeta{font-size:.8rem;color:var(--muted);font-weight:600}
+.hcheck{flex:none;border:0;border-radius:12px;padding:9px 10px;font-weight:800;font-size:.85rem;background:var(--ink);color:var(--bg)}
+.hcheck.done{background:var(--mint-soft);color:var(--ink);cursor:default}
+.add-row{display:flex;gap:10px;flex-wrap:wrap}
+.xp{display:flex;flex-direction:column;gap:6px}
+.xp-bar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.xp-fill{height:100%;background:repeating-linear-gradient(-45deg,var(--butter) 0 10px,color-mix(in srgb,var(--butter) 80%,var(--coral)) 10px 20px);border-radius:999px;transition:width .8s ease}
+.xp-meta{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.76rem;color:var(--muted);gap:8px}
+
+/* hero */
+.hero{background:var(--surface);border-radius:28px;padding:22px 18px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 10% 16%,var(--mint-soft) 0 38px,transparent 39px),radial-gradient(circle at 92% 84%,var(--coral-soft) 0 54px,transparent 55px);pointer-events:none}
+.hero-tag{position:relative;display:flex;align-items:center;gap:8px;font-weight:800}
+.kind-pill{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.ring-wrap{position:relative;width:min(290px,78vw);aspect-ratio:1;max-width:100%}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-track{stroke:var(--surface-2);fill:none}
+.ring-bar{stroke:var(--mint);fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 34px}
+.days{font-family:var(--f-display);font-size:clamp(4rem,21vw,6.4rem);line-height:.9;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.days-label{font-family:var(--f-display);font-size:.86rem;letter-spacing:.03em;margin-top:8px;line-height:1.2;max-width:15ch}
+.clock{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:6px}
+.goal-line{position:relative;font-weight:600;text-align:center;font-size:.98rem}
+.goal-line em{font-style:normal;background:var(--butter-soft);padding:1px 8px;border-radius:6px}
+.sub-line{position:relative;font-size:.86rem;color:var(--muted);text-align:center;margin-top:-6px}
+
+/* actions */
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:16px;padding:14px;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease;text-align:center}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--mint);color:var(--on-accent)}
+.btn-wide{grid-column:1/-1}
+.btn-big{font-size:1.06rem;padding:16px}
+.btn-primary[disabled]{background:var(--mint-soft);color:var(--muted);cursor:default}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-coral[disabled]{background:var(--coral-soft);color:var(--muted);cursor:default}
+.btn-ink{background:var(--ink);color:var(--bg)}
+.btn-ink[disabled]{opacity:.4;cursor:default}
+.btn-ghost{background:var(--surface);border:1px solid var(--line)}
+.btn-small{padding:10px 14px;font-size:.92rem;border-radius:12px}
+.count-pill{background:rgba(255,255,255,.25);border-radius:999px;padding:0 8px;font-family:var(--f-mono);font-size:.85rem}
+.honest-note{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.84rem;color:var(--muted);flex-wrap:wrap}
+.linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font-size:.84rem}
+.tip{background:var(--surface);border-radius:14px;padding:12px 14px;font-size:.95rem;border:1px solid var(--line)}
+.tip strong{color:var(--coral)}
+
+/* week */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase}
+.dot{width:100%;max-width:40px;aspect-ratio:1;border-radius:10px;background:var(--surface-2);border:2px solid var(--line);display:grid;place-items:center;transform:rotate(-4deg)}
+.dot.on{background:var(--mint);border-color:var(--mint)}
+.dot.on::after{content:"";width:40%;height:22%;border-left:3px solid var(--on-accent);border-bottom:3px solid var(--on-accent);transform:rotate(-45deg) translate(1px,-2px)}
+.dot.today{border-color:var(--ink);border-style:dashed}
+.dot.today.on{border-style:solid}
+
+/* stats */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface-2);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat .v{font-family:var(--f-display);font-size:1.5rem;line-height:1.15;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stat .k{font-size:.85rem;color:var(--muted);font-weight:600}
+
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 10px}
+@media (max-width:460px){.badges{grid-template-columns:repeat(3,1fr)}}
+.badge{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:none;border:0;padding:4px 0}
+.cubeb{width:64px;aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-6deg);position:relative;transition:transform .2s}
+.badge:hover .cubeb{transform:rotate(0) scale(1.05)}
+.cubeb .n{font-family:var(--f-display);font-size:1.4rem;line-height:1}
+.cubeb .u{font-family:var(--f-mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.cubeb::after{content:"";position:absolute;inset:6px;border-radius:11px;border:2px solid rgba(255,255,255,.45);pointer-events:none}
+.badge.locked .cubeb{background:var(--surface-2);color:var(--muted);border:2px dashed var(--line)}
+.badge.locked .cubeb::after{display:none}
+.badge .bn{font-weight:700;font-size:.82rem;line-height:1.2}
+.badge.locked .bn{color:var(--muted);font-weight:600}
+
+/* forms */
+.seg{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px 10px;font-weight:700;font-size:.9rem;color:var(--muted);min-width:0}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-weight:700;font-size:.88rem}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.field>.lbl{font-weight:700;font-size:.88rem}
+.text-in,.date-in{font:inherit;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%;min-width:0}
+.inline{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.inline .date-in{width:auto;flex:1}
+
+/* share */
+.preview{display:flex;justify-content:center;background:var(--surface-2);border-radius:18px;padding:16px}
+.preview img{max-height:440px;width:auto;max-width:100%;border-radius:14px;box-shadow:var(--shadow)}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.caption{font-family:var(--f-mono);font-size:.8rem;background:var(--surface-2);border-radius:12px;padding:10px 12px;white-space:pre-wrap;color:var(--muted);margin:0;overflow-wrap:anywhere}
+
+/* pact */
+.pact{background:var(--sky-soft);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.pact p{margin:0}
+.pact ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.seal{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.seal b{font-family:var(--f-display);font-weight:400;font-size:1.1rem;color:var(--ink)}
+
+/* settings */
+details.settings{background:var(--surface);border-radius:22px;box-shadow:var(--shadow)}
+details.settings summary{list-style:none;padding:16px 18px;font-weight:800;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+details.settings summary::-webkit-details-marker{display:none}
+details.settings summary::after{content:"+";font-family:var(--f-mono);font-size:1.2rem}
+details.settings[open] summary::after{content:"–"}
+.settings-body{padding:0 18px 18px;display:flex;flex-direction:column;gap:16px}
+.warn-box{background:var(--coral-soft);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.warn-box p{margin:0}
+.history{display:flex;flex-direction:column;gap:6px;font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.history div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:4px}
+.foot{font-size:.8rem;color:var(--muted);text-align:center}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(8,16,12,.55);display:grid;place-items:center;padding:16px;z-index:20;overflow-y:auto}
+.modal-card{background:var(--surface);border-radius:26px;padding:24px 20px 20px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:14px;animation:pop .4s cubic-bezier(.2,1.4,.4,1);max-height:calc(100vh - 32px);overflow-y:auto}
+.modal-card.center{align-items:center;text-align:center;max-width:360px}
+.modal-card .cubeb{width:110px;border-radius:24px}
+.modal-card .cubeb .n{font-size:2.6rem}
+.modal-card h3{font-family:var(--f-display);font-weight:400;font-size:1.45rem}
+.modal-card p{margin:0}
+.modal-card .row{display:flex;gap:10px;width:100%;flex-wrap:wrap}
+.modal-card .row .btn{flex:1}
+.check-line{display:flex;gap:10px;align-items:flex-start;font-weight:700;cursor:pointer}
+.check-line input{width:20px;height:20px;margin-top:2px;accent-color:var(--mint);flex:none}
+@keyframes pop{from{transform:scale(.8);opacity:0}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;z-index:30;max-width:calc(100% - 32px);text-align:center}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:25;width:100%;height:100%}
+.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true"></span>mejor versión</div>
+    <div class="lvl-chip" title="Tu nivel"><b id="lvlNum">1</b><span id="lvlName">Novato</span></div>
+  </header>
+
+  <section class="banner" id="banner" hidden>
+    <p><strong>Estas rachas son un ejemplo.</strong> Haz tu pacto de honestidad y crea tu primera racha: dejar un vicio o crear un hábito.</p>
+    <div><button class="btn btn-ink btn-small" id="startReal">Empezar mi camino</button></div>
+  </section>
+
+  <section class="install" id="installBar" hidden>
+    <div class="install-txt"><strong>Instala la app</strong><span id="installHow">Tenla en tu pantalla de inicio, como cualquier app.</span></div>
+    <div class="inline"><button class="btn btn-ink btn-small" id="installBtn">Instalar</button><button class="linkbtn" id="installClose">Ahora no</button></div>
+  </section>
+
+  <section class="quote" aria-label="Frase del día">
+    <span class="eyebrow">Frase del día</span>
+    <blockquote id="quote"></blockquote>
+    <button id="nextQuote" type="button">Otra frase</button>
+  </section>
+
+  <section class="card" aria-label="Tus rachas">
+    <div class="card-head"><h2>Tus rachas</h2><span class="eyebrow" id="todayCount">0 / 0 hoy</span></div>
+    <div class="hlist" id="hlist"></div>
+    <div class="add-row"><button class="btn btn-ghost btn-small" id="addHabit">+ Nueva racha</button></div>
+    <div class="xp">
+      <div class="xp-meta"><span id="xpNow">0 XP</span><span id="xpNext">300 XP para Aprendiz</span></div>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+  </section>
+
+  <section class="hero" aria-label="Contador">
+    <div class="hero-tag"><span class="kind-pill" id="kindPill">Dejar</span><span id="heroName">Sin azúcar</span></div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="ring-track" cx="60" cy="60" r="52" stroke-width="10"></circle>
+        <circle class="ring-bar" id="ringBar" cx="60" cy="60" r="52" stroke-width="10" stroke-dasharray="326.73" stroke-dashoffset="326.73"></circle>
+      </svg>
+      <div class="ring-center">
+        <div class="days" id="days">0</div>
+        <div class="days-label" id="daysLabel">Días siendo tu mejor versión</div>
+        <div class="clock" id="clock">00 h 00 m 00 s</div>
+      </div>
+    </div>
+    <div class="goal-line" id="goalLine"></div>
+    <div class="sub-line" id="subLine"></div>
+  </section>
+
+  <section class="actions" aria-label="Acciones">
+    <button class="btn btn-primary btn-wide btn-big" id="checkin">Check-in</button>
+    <div class="honest-note"><span id="honestNote">Marca solo si es verdad. Nadie lo verifica: tu palabra es la prueba.</span><button class="linkbtn" id="undo" hidden>Deshacer check-in de hoy</button></div>
+    <button class="btn btn-coral" id="craving">Vencí un antojo <span class="count-pill" id="cravCount">0</span></button>
+    <button class="btn btn-ink" id="goShare">Compartir</button>
+  </section>
+  <div class="tip" id="tip" hidden></div>
+
+  <section class="card" aria-label="Semana">
+    <div class="card-head"><h2>Tu semana</h2><span class="eyebrow" id="weekNote"></span></div>
+    <div class="week" id="week"></div>
+  </section>
+
+  <section class="card" aria-label="Estadísticas">
+    <div class="card-head"><h2>Tus números</h2><span class="eyebrow" id="statsNote"></span></div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="card" aria-label="Logros">
+    <div class="card-head"><h2>Logros</h2><span class="eyebrow" id="achCount">0 / 12</span></div>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <section class="card" id="studio" aria-label="Compartir">
+    <div class="card-head"><h2>Estudio para Instagram</h2><span class="eyebrow">PNG listo para subir</span></div>
+    <div class="field"><span class="lbl">Formato</span>
+      <div class="seg" id="fmtSeg"><button data-v="story" aria-pressed="true">Historia 9:16</button><button data-v="post" aria-pressed="false">Post 1:1</button></div>
+    </div>
+    <div class="field"><span class="lbl">Estilo</span>
+      <div class="seg" id="styleSeg"><button data-v="menta" aria-pressed="true">Menta</button><button data-v="coral" aria-pressed="false">Coral</button><button data-v="noche" aria-pressed="false">Noche</button><button data-v="limon" aria-pressed="false">Limón</button></div>
+    </div>
+    <div class="field"><label for="handle">Tu usuario (opcional)</label><input id="handle" class="text-in" placeholder="@tuusuario" maxlength="30" autocomplete="off"></div>
+    <div class="preview"><img id="shareImg" alt="Vista previa de la imagen para compartir"></div>
+    <div class="share-btns"><button class="btn btn-primary" id="saveImg">Guardar imagen</button><button class="btn btn-ghost" id="copyCap">Copiar texto</button></div>
+    <p class="hint">En el móvil también puedes mantener presionada la imagen para guardarla.</p>
+    <p class="caption" id="caption"></p>
+  </section>
+
+  <section class="card" id="remCard" aria-label="Recordatorios">
+    <div class="card-head"><h2>Recordatorios</h2><span class="eyebrow" id="remState">Apagados</span></div>
+    <p class="hint">Te acompañamos todos los días con notificaciones en tu teléfono.</p>
+    <label class="check-line"><input type="checkbox" id="remQuote">Frase motivadora cada mañana</label>
+    <div class="inline"><span class="lbl" style="font-weight:700;font-size:.88rem">Hora</span><input type="time" id="remQuoteTime" class="date-in" value="08:00" style="max-width:150px"></div>
+    <label class="check-line"><input type="checkbox" id="remCheck">Recordarme hacer mis check-ins</label>
+    <div class="inline"><span class="lbl" style="font-weight:700;font-size:.88rem">Hora</span><input type="time" id="remCheckTime" class="date-in" value="20:30" style="max-width:150px"></div>
+    <div><button class="btn btn-ink btn-small" id="remSave">Guardar recordatorios</button></div>
+    <p class="hint" id="remNote"></p>
+  </section>
+
+  <section class="pact" aria-label="Pacto de honestidad">
+    <div class="card-head"><h2>Pacto de honestidad</h2><span class="eyebrow" id="pactState">Sin firmar</span></div>
+    <p>Esta app no te vigila. Solo tú sabes si cumpliste. Por eso aquí la verdad vale más que una racha perfecta.</p>
+    <div class="seal" id="pactSeal"></div>
+    <div><button class="btn btn-ink btn-small" id="pactBtn">Hacer mi pacto</button></div>
+  </section>
+
+  <details class="settings" id="settings">
+    <summary id="settingsTitle">Ajustes de esta racha</summary>
+    <div class="settings-body">
+      <div class="field"><label for="editName">Nombre del propósito</label>
+        <div class="inline"><input id="editName" class="text-in" maxlength="40" style="flex:1"><button class="btn btn-ghost btn-small" id="saveName">Guardar</button></div></div>
+      <div class="field"><span class="lbl">Meta de seguimiento</span>
+        <div class="seg" id="goalSeg"><button data-v="7" aria-pressed="false">Semana · 7 días</button><button data-v="30" aria-pressed="true">Mes · 30 días</button><button data-v="365" aria-pressed="false">Año · 365 días</button></div></div>
+      <div class="field" id="startField"><label for="startEdit">Fecha de inicio de la racha actual</label>
+        <div class="inline"><input type="date" id="startEdit" class="date-in"><button class="btn btn-ghost btn-small" id="saveStart">Guardar fecha</button></div></div>
+      <div class="field" id="metricField"><label for="metricIn" id="metricLbl">Por día</label>
+        <div class="inline"><input type="number" id="metricIn" class="text-in" min="1" max="1000" style="flex:1"><button class="btn btn-ghost btn-small" id="saveMetric">Guardar</button></div></div>
+      <div class="warn-box" id="relapseBox">
+        <p><strong>¿Recaíste?</strong> Registrarlo es de valientes y suma <strong>+30 XP de honestidad</strong>. Tu récord, antojos y logros se guardan; solo reinicias el contador.</p>
+        <button class="btn btn-coral btn-small" id="relapse">Registrar recaída</button>
+        <div id="relapseConfirm" hidden class="inline"><span style="font-weight:700">¿Reiniciar esta racha?</span><button class="btn btn-ink btn-small" id="relapseYes">Sí, empiezo de nuevo</button><button class="btn btn-ghost btn-small" id="relapseNo">Cancelar</button></div>
+      </div>
+      <div class="field" id="historyField"><span class="lbl">Rachas anteriores</span><div class="history" id="history"></div></div>
+      <div class="warn-box">
+        <button class="btn btn-ghost btn-small" id="del">Eliminar esta racha</button>
+        <div id="delConfirm" hidden class="inline"><span style="font-weight:700">Se borra todo su historial.</span><button class="btn btn-coral btn-small" id="delYes">Eliminar</button><button class="btn btn-ghost btn-small" id="delNo">Cancelar</button></div>
+      </div>
+      <p class="hint" id="storeNote"></p>
+    </div>
+  </details>
+  <p class="foot">Las cifras son estimaciones motivacionales, no consejo médico.</p>
+</div>
+
+<!-- achievement modal -->
+<div class="modal" id="achModal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal-card center">
+    <span class="eyebrow" id="mEyebrow">¡Logro desbloqueado!</span>
+    <div class="cubeb t0" id="mCube"><span class="n" id="mN">7</span><span class="u" id="mU">días</span></div>
+    <h3 id="mTitle">Semana completa</h3>
+    <p id="mDesc" class="hint"></p>
+    <div class="row"><button class="btn btn-ghost" id="mClose">Seguir</button><button class="btn btn-coral" id="mShare">Compartirlo</button></div>
+  </div>
+</div>
+
+<!-- pact modal -->
+<div class="modal" id="pactModal" hidden role="dialog" aria-modal="true" aria-labelledby="pTitle">
+  <div class="modal-card">
+    <span class="eyebrow">Antes de empezar</span>
+    <h3 id="pTitle">Pacto de honestidad</h3>
+    <p>No hay cámaras, sensores ni nadie revisando. Esta racha es tuya y solo vale si es real.</p>
+    <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+      <li>Marco un check-in solo cuando de verdad cumplí.</li>
+      <li>Si recaigo, lo registro. Ser honesto suma +30 XP.</li>
+      <li>Compito conmigo, no con los demás.</li>
+      <li>Un mal día no me define: vuelvo a empezar.</li>
+    </ul>
+    <label class="check-line"><input type="checkbox" id="pactCheck">Hago este pacto conmigo mismo</label>
+    <div class="row"><button class="btn btn-ghost" id="pactCancel">Ahora no</button><button class="btn btn-primary" id="pactSign" disabled>Firmar mi pacto</button></div>
+  </div>
+</div>
+
+<!-- creator modal -->
+<div class="modal" id="newModal" hidden role="dialog" aria-modal="true" aria-labelledby="nTitle">
+  <div class="modal-card">
+    <h3 id="nTitle">Nueva racha</h3>
+    <div class="field"><span class="lbl">¿Qué quieres hacer?</span>
+      <div class="seg" id="nKind"><button data-v="quit" aria-pressed="true">Dejar un vicio</button><button data-v="build" aria-pressed="false">Crear un hábito</button></div></div>
+    <div class="field"><span class="lbl">Elige una idea</span><div class="chips" id="nPresets"></div></div>
+    <div class="field"><label for="nName">Tu propósito</label><input id="nName" class="text-in" maxlength="40" placeholder="Ej.: Leyendo 10 páginas"></div>
+    <div class="field" id="nMetricField"><label for="nMetric" id="nMetricLbl">Por día</label><input type="number" id="nMetric" class="text-in" min="1" max="1000"></div>
+    <div class="field"><span class="lbl">¿Cuánto tiempo quieres hacerle seguimiento?</span>
+      <div class="seg" id="nGoal"><button data-v="7" aria-pressed="false">Semana</button><button data-v="30" aria-pressed="true">Mes</button><button data-v="365" aria-pressed="false">Año</button></div></div>
+    <div class="field" id="nStartField"><span class="lbl">¿Desde cuándo?</span>
+      <div class="seg" id="nStartMode"><button data-v="now" aria-pressed="true">Desde ahora</button><button data-v="date" aria-pressed="false">Ya llevo días</button></div>
+      <input type="date" id="nDate" class="date-in" hidden aria-label="Fecha de inicio"></div>
+    <p class="hint" id="nErr" hidden style="color:var(--coral);font-weight:700"></p>
+    <div class="row"><button class="btn btn-ghost" id="nCancel">Cancelar</button><button class="btn btn-primary" id="nCreate">Crear racha</button></div>
+  </div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+const DAY=864e5, CD=15*60e3;
+const DAYN=[[1,'Primer paso'],[3,'Arranque'],[7,'Semana completa'],[14,'Dos semanas'],[21,'Hábito formado'],[30,'Mes de hierro'],[60,'Imparable'],[90,'Reinicio total'],[180,'Medio año'],[365,'Leyenda']];
+const LEVELS=[[0,'Novato'],[300,'Aprendiz'],[800,'Constante'],[2000,'Guerrero'],[4000,'Veterano'],[8000,'Maestro'],[15000,'Leyenda'],[30000,'Inmortal']];
+const PRESETS={
+  quit:[
+    {id:'azucar',label:'Azúcar',name:'Sin azúcar',metric:{per:70,unit:'g',label:'Azúcar evitada',q:'Gramos de azúcar que comías al día'}},
+    {id:'fumar',label:'Fumar',name:'Sin fumar',metric:{per:10,unit:'cig',label:'Cigarrillos evitados',q:'Cigarrillos que fumabas al día'}},
+    {id:'alcohol',label:'Alcohol',name:'Sin alcohol'},
+    {id:'chatarra',label:'Comida chatarra',name:'Sin comida chatarra'},
+    {id:'redes',label:'Redes de noche',name:'Sin redes antes de dormir'},
+    {id:'otro',label:'Otro',name:''}],
+  build:[
+    {id:'gym',label:'Ir al gym',name:'Entrenando'},
+    {id:'leer',label:'Leer 10 páginas',name:'Leyendo 10 páginas'},
+    {id:'aprender',label:'Aprender algo nuevo',name:'Aprendiendo algo nuevo'},
+    {id:'meditar',label:'Meditar',name:'Meditando 10 minutos'},
+    {id:'agua',label:'Tomar agua',name:'Tomando 2 L de agua'},
+    {id:'otro',label:'Otro',name:''}]
+};
+const QUOTES=['No tienes que ser perfecto. Tienes que ser honesto y seguir.','Cada día que cumples es un voto por la persona que quieres ser.','La disciplina es recordar lo que quieres de verdad.','Hoy no es para siempre. Hoy es solo hoy. Gánalo.','Tu mejor versión se construye en días normales, no en días perfectos.','Recaer no borra lo que aprendiste. Registrarlo con honestidad te hace más fuerte.','El antojo dura minutos. El orgullo de vencerlo dura todo el día.','Pequeño y constante le gana a grande y a veces.','Nadie te está mirando. Por eso lo que haces cuenta tanto.','No compitas con otros. Compite con quien eras ayer.','Diez páginas hoy son un libro este mes.','Tu cuerpo escucha todo lo que haces. Dale buenas noticias.','La motivación te hace empezar. El hábito te hace llegar.','Un mal día no es una mala racha. Vuelve mañana.','Ser honesto contigo es el primer hábito de todos.','Lo difícil de hoy es lo normal de mañana.','No esperes a tener ganas. Empieza y las ganas llegan.','Cada no a lo que te daña es un sí a lo que quieres.','Tu yo del futuro te está agradeciendo ahora mismo.','Constancia no es no fallar nunca. Es no rendirse nunca.','Hazlo tan pequeño que no puedas decir que no.','Tus hábitos de hoy son tu biografía de mañana.','Aprender algo nuevo cada día te cambia más de lo que crees.','Respira. Esto también pasa. Tú te quedas.','Tu mejor versión no es otra persona. Eres tú, practicando.','Lo que repites, te construye.','Celebra el día 1 igual que el día 100.','Cuando nadie verifica, tu palabra es la única prueba. Hazla valer.'];
+const TIPS=['Toma un vaso de agua grande: la sed a veces se disfraza de antojo.','Sal a caminar 10 minutos. La mayoría de antojos pasan en menos de 15.','Cepíllate los dientes o mastica chicle sin azúcar.','Come algo con proteína o un puñado de nueces.','Respira 5 veces lento y cuenta hasta 60. Lo tienes.','Escribe cómo te sientes: muchos antojos son aburrimiento o estrés.','Llama o escríbele a alguien que te apoye.','Cambia de lugar: sal de la habitación donde te dio el antojo.'];
+const WD=['D','L','M','M','J','V','S'];
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const keyOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayKey=()=>keyOf(new Date());
+const dayMs=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d).getTime()};
+const fmtDate=ms=>new Date(ms).toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'});
+const goalName=g=>g===7?'1 semana':g===365?'1 año':'1 mes';
+const plural=(n,a,b)=>n===1?a:b;
+const uid=()=>'h'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+// ---------- model ----------
+function blank(){return {v:2,habits:[],activeId:null,handle:'',pledge:null,honestTotal:0}}
+function newHabit(o){return Object.assign({id:uid(),kind:'build',preset:'otro',name:'',goal:30,start:Date.now(),checkins:[],cravings:0,lastCraving:0,best:0,attempts:[],honest:0,metric:null,seen:[],color:0,created:Date.now()},o||{})}
+function normHabit(h){h=newHabit(h);h.checkins=Array.isArray(h.checkins)?[...new Set(h.checkins)].slice(-800):[];h.attempts=Array.isArray(h.attempts)?h.attempts.slice(-50):[];h.seen=Array.isArray(h.seen)?h.seen:[];if(![7,30,365].includes(h.goal))h.goal=30;return h}
+function normalize(d){const s=Object.assign(blank(),d||{});s.habits=(Array.isArray(s.habits)?s.habits:[]).map(normHabit);if(!s.habits.find(h=>h.id===s.activeId))s.activeId=s.habits[0]?s.habits[0].id:null;delete s.demo;return s}
+function fromV1(o){
+  const h=newHabit({kind:'quit',preset:'azucar',name:'Sin azúcar',start:o.start,best:o.best||0,attempts:o.attempts||[],cravings:o.cravings||0,checkins:o.checkins||[],metric:{per:o.sugar||70,unit:'g',label:'Azúcar evitada',q:'Gramos de azúcar que comías al día'},seen:(o.seen||[]).filter(x=>/^d\d+$/.test(x)),color:0});
+  return normalize({habits:[h],activeId:h.id,handle:o.handle||''});
+}
+function demoState(){
+  const now=Date.now(),s=blank();
+  const keys=(n,skip)=>{const a=[];for(let i=0;i<n;i++)if(!(skip||[]).includes(i))a.push(keyOf(new Date(now-i*DAY)));return a};
+  const a=newHabit({kind:'quit',preset:'azucar',name:'Sin azúcar',start:now-12.4*DAY,best:12,cravings:9,checkins:keys(12,[3]),metric:{per:70,unit:'g',label:'Azúcar evitada',q:''},color:0,goal:30,attempts:[{start:now-30*DAY,end:now-24*DAY,days:5}],honest:1});
+  const b=newHabit({kind:'build',preset:'leer',name:'Leyendo 10 páginas',checkins:keys(6).slice(1),color:1,goal:30});
+  const c=newHabit({kind:'build',preset:'gym',name:'Entrenando',checkins:keys(9),color:2,goal:365});
+  s.habits=[a,b,c];s.activeId=a.id;s.demo=true;
+  s.habits.forEach(h=>h.seen=achList(h).filter(x=>isUnlocked(h,x)).map(x=>x.id));
+  return s;
+}
+
+// ---------- derived ----------
+function streakBuild(h){const set=new Set(h.checkins);let d=new Date();if(!set.has(keyOf(d)))d=new Date(Date.now()-DAY);let n=0;while(set.has(keyOf(d))){n++;d=new Date(d.getTime()-DAY)}return n}
+function longestRun(keys){const ms=[...new Set(keys)].map(dayMs).sort((a,b)=>a-b);let best=0,run=0,prev=null;ms.forEach(m=>{run=(prev!==null&&Math.round((m-prev)/DAY)===1)?run+1:1;best=Math.max(best,run);prev=m});return best}
+function daysF(h){return h.kind==='quit'?Math.max(0,(Date.now()-h.start)/DAY):streakBuild(h)}
+function days(h){return Math.floor(daysF(h))}
+function bestOf(h){return h.kind==='quit'?Math.max(h.best||0,days(h)):Math.max(h.best||0,longestRun(h.checkins))}
+function doneToday(h){return h.checkins.includes(todayKey())}
+function habitXP(h){if(h.kind==='quit'){const d=h.attempts.reduce((a,b)=>a+(b.days||0),0)+days(h);return d*100+h.cravings*20+h.checkins.length*15+h.honest*30}return h.checkins.length*100}
+function xp(){return state.habits.reduce((a,h)=>a+habitXP(h),0)}
+function level(){const x=xp();let i=0;LEVELS.forEach((l,j)=>{if(x>=l[0])i=j});return {i,name:LEVELS[i][1],x,next:LEVELS[i+1]||null,base:LEVELS[i][0]}}
+function achList(h){
+  const L=DAYN.map(([n,name])=>({id:'d'+n,k:'days',n,name,desc:n+' '+plural(n,'día','días')+' seguidos: '+(h.name||'tu racha').toLowerCase()+'.'}));
+  L.push({id:'goal',k:'goal',n:h.goal,name:'Meta cumplida',desc:'Llegaste a tu meta de '+goalName(h.goal)+'.'});
+  if(h.kind==='quit')L.push({id:'c10',k:'crav',n:10,name:'Voluntad',desc:'Venciste 10 antojos.'});
+  else L.push({id:'t50',k:'total',n:50,name:'50 veces',desc:'Cumpliste 50 días en total.'});
+  return L;
+}
+function isUnlocked(h,a){const b=bestOf(h);return a.k==='days'?b>=a.n:a.k==='goal'?b>=h.goal:a.k==='crav'?h.cravings>=a.n:h.checkins.length>=a.n}
+function unitOf(a){return a.k==='days'?plural(a.n,'día','días'):a.k==='goal'?'meta':a.k==='crav'?'antojos':'veces'}
+function tierOf(i){return i%4}
+function latestBadge(h){const u=achList(h).filter(a=>a.k==='days'&&isUnlocked(h,a));return u.length?u[u.length-1]:null}
+function active(){return state.habits.find(h=>h.id===state.activeId)||null}
+function metricVal(h){if(!h.metric)return null;const v=daysF(h)*h.metric.per;if(h.metric.unit==='g')return v>=1000?(v/1000).toLocaleString('es',{maximumFractionDigits:1})+' kg':Math.round(v).toLocaleString('es')+' g';return Math.floor(v).toLocaleString('es')}
+function monoLetter(h){const n=(h.name||'?').replace(/^(sin|dejar)\s+(el\s+|la\s+|los\s+|las\s+)?/i,'');return (n[0]||'?').toUpperCase()}
+
+// ---------- storage (nativo en el teléfono) ----------
+const CAP=window.Capacitor||null;
+const NATIVE=!!(CAP&&CAP.isNativePlatform&&CAP.isNativePlatform());
+const P=(CAP&&CAP.Plugins)||{};
+let state=demoState();
+const LKEY='mejorversion.v2';
+let saveT=null;
+async function readStored(){
+  try{if(NATIVE&&P.Preferences){const r=await P.Preferences.get({key:LKEY});if(r&&r.value)return normalize(JSON.parse(r.value))}}catch(e){}
+  try{const r=localStorage.getItem(LKEY);if(r)return normalize(JSON.parse(r))}catch(e){}
+  return null;
+}
+function save(){
+  if(state.demo)return;
+  const body=JSON.stringify(state);
+  try{localStorage.setItem(LKEY,body)}catch(e){}
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{if(NATIVE&&P.Preferences)P.Preferences.set({key:LKEY,value:body}).catch(()=>{});scheduleReminders()},400);
+}
+function renderStoreNote(){$('storeNote').textContent=NATIVE?'Tu progreso se guarda solo en este teléfono. Si desinstalas la app, se borra.':'Tu progreso se guarda en este navegador de este teléfono. Si borras los datos del navegador, se pierde.'}
+
+// ---------- render ----------
+const CIRC=2*Math.PI*52;
+function renderHero(){
+  const h=active();if(!h)return;
+  const f=daysF(h),d=Math.floor(f);
+  $('days').textContent=d;
+  $('daysLabel').textContent=plural(d,'Día siendo tu mejor versión','Días siendo tu mejor versión');
+  if(h.kind==='quit'){
+    const ms=Date.now()-h.start-d*DAY;
+    $('clock').textContent=pad(Math.floor(ms/36e5))+' h '+pad(Math.floor(ms%36e5/6e4))+' m '+pad(Math.floor(ms%6e4/1e3))+' s';
+  }else{
+    const mid=new Date();mid.setHours(24,0,0,0);const left=mid-Date.now();
+    $('clock').textContent=doneToday(h)?'Hoy: cumplido':'Te quedan '+Math.floor(left/36e5)+' h '+pad(Math.floor(left%36e5/6e4))+' m para hoy';
+  }
+  $('ringBar').style.strokeDashoffset=(CIRC*(1-Math.min(1,f/h.goal))).toFixed(2);
+  const gl=$('goalLine');gl.textContent='';
+  if(d>=h.goal){gl.textContent='¡Meta de '+goalName(h.goal)+' cumplida! Sigue sumando.'}
+  else{const left=Math.ceil(h.goal-f);gl.append('Meta: '+goalName(h.goal)+' · faltan ');const em=document.createElement('em');em.textContent=left+' '+plural(left,'día','días');gl.append(em)}
+  const nx=achList(h).find(a=>a.k==='days'&&a.n>d);
+  $('subLine').textContent=nx?'Próximo logro: «'+nx.name+'» en '+(Math.ceil(nx.n-f))+' '+plural(Math.ceil(nx.n-f),'día','días'):'Todos los logros de días desbloqueados';
+  // craving cooldown
+  if(h.kind==='quit'){
+    const wait=h.lastCraving+CD-Date.now();const b=$('craving');
+    if(wait>0&&!state.demo){b.disabled=true;b.textContent='Próximo antojo en '+Math.floor(wait/6e4)+':'+pad(Math.floor(wait%6e4/1e3))}
+    else if(b.disabled||!b.querySelector('.count-pill')){b.disabled=false;b.innerHTML='Vencí un antojo <span class="count-pill" id="cravCount"></span>';$('cravCount').textContent=h.cravings}
+  }
+}
+function renderAll(){
+  const h=active();
+  $('banner').hidden=!state.demo;
+  const L=level();
+  $('lvlNum').textContent=L.i+1;$('lvlName').textContent=L.name;
+  $('xpNow').textContent='Nivel '+(L.i+1)+' · '+L.x.toLocaleString('es')+' XP';
+  $('xpNext').textContent=L.next?(L.next[0]-L.x).toLocaleString('es')+' XP para '+L.next[1]:'Nivel máximo';
+  $('xpFill').style.width=(L.next?((L.x-L.base)/(L.next[0]-L.base)*100):100).toFixed(1)+'%';
+  // list
+  const list=$('hlist');list.innerHTML='';let doneN=0;
+  if(!state.habits.length){const p=document.createElement('p');p.className='hint';p.textContent='Aún no tienes rachas. Crea la primera con «+ Nueva racha».';list.append(p)}
+  state.habits.forEach(x=>{
+    const done=doneToday(x);if(done)doneN++;
+    const row=document.createElement('div');row.className='hrow'+(x.id===state.activeId?' active':'');
+    const sel=document.createElement('button');sel.className='hsel';sel.type='button';
+    const m=document.createElement('span');m.className='mono t'+x.color+(x.kind==='quit'?' quit':'');m.textContent=monoLetter(x);
+    const info=document.createElement('span');info.className='hinfo';
+    const n=document.createElement('span');n.className='hname';n.textContent=x.name;
+    const meta=document.createElement('span');meta.className='hmeta';const dd=days(x);meta.textContent=(x.kind==='quit'?'Dejar':'Crear')+' · '+dd+' '+plural(dd,'día','días')+' · meta '+x.goal;
+    info.append(n,meta);sel.append(m,info);sel.onclick=()=>{state.activeId=x.id;featured=null;save();renderAll()};
+    const c=document.createElement('button');c.type='button';c.className='hcheck'+(done?' done':'');c.textContent=done?'Hoy ✓':'Marcar hoy';
+    c.setAttribute('aria-label',(done?'Check-in hecho: ':'Marcar check-in: ')+x.name);
+    c.onclick=()=>{if(!done)doCheckin(x)};
+    row.append(sel,c);list.append(row);
+  });
+  $('todayCount').textContent=doneN+' / '+state.habits.length+' hoy';
+  const has=!!h;
+  document.querySelectorAll('.hero,.actions,#studio,#settings').forEach(e=>e.hidden=!has);
+  document.querySelectorAll('.card[aria-label="Semana"],.card[aria-label="Estadísticas"],.card[aria-label="Logros"]').forEach(e=>e.hidden=!has);
+  renderPact();
+  if(!h){renderStoreNote();return}
+  // hero
+  $('kindPill').textContent=h.kind==='quit'?'Dejar':'Crear';$('heroName').textContent=h.name;
+  $('ringBar').style.stroke=['var(--mint)','var(--butter)','var(--coral)','var(--sky)'][h.color];
+  // actions
+  const done=doneToday(h);
+  $('checkin').disabled=done;
+  $('checkin').textContent=done?'Check-in de hoy hecho ✓':(h.kind==='quit'?'Hoy me mantuve firme · Check-in':'Lo cumplí hoy · Check-in');
+  $('undo').hidden=!done||state.demo;
+  $('craving').hidden=h.kind!=='quit';
+  $('goShare').classList.toggle('btn-wide',h.kind!=='quit');
+  if(h.kind==='quit'){$('craving').disabled=false;$('craving').innerHTML='Vencí un antojo <span class="count-pill" id="cravCount"></span>';$('cravCount').textContent=h.cravings}
+  if(h.kind!=='quit')$('tip').hidden=true;
+  renderHero();
+  // week
+  const w=$('week');w.innerHTML='';const set=new Set(h.checkins);let wk=0;
+  for(let i=6;i>=0;i--){const dt=new Date(Date.now()-i*DAY);const on=set.has(keyOf(dt));if(on)wk++;const el=document.createElement('div');el.className='day';const dot=document.createElement('div');dot.className='dot'+(on?' on':'')+(i===0?' today':'');const lb=document.createElement('span');lb.textContent=i===0?'Hoy':WD[dt.getDay()];el.append(dot,lb);w.append(el)}
+  $('weekNote').textContent=wk+' de 7 días con check-in';
+  // stats
+  const S=[];const d=days(h),b=bestOf(h),pct=Math.min(100,Math.round(daysF(h)/h.goal*100));
+  if(h.kind==='quit'){
+    S.push([b,'Récord de días']);
+    if(h.metric)S.push([metricVal(h)+(h.metric.unit==='cig'?'':''),h.metric.label+' en esta racha']);else S.push([h.checkins.length,'Check-ins honestos']);
+    S.push([h.cravings,'Antojos vencidos']);S.push([pct+'%','De tu meta de '+goalName(h.goal)]);
+    $('statsNote').textContent=h.metric?'estimado · '+h.metric.per+(h.metric.unit==='g'?' g':' cig')+'/día':'';
+  }else{
+    S.push([b,'Racha récord']);S.push([h.checkins.length,'Días cumplidos en total']);S.push([pct+'%','De tu meta de '+goalName(h.goal)]);S.push([wk+'/7','Esta semana']);
+    $('statsNote').textContent='';
+  }
+  const st=$('stats');st.innerHTML='';S.forEach(([v,k])=>{const e=document.createElement('div');e.className='stat';const a=document.createElement('span');a.className='v';a.textContent=v;const c=document.createElement('span');c.className='k';c.textContent=k;e.append(a,c);st.append(e)});
+  // badges
+  const bg=$('badges');bg.innerHTML='';let cnt=0;const AL=achList(h);
+  AL.forEach((a,i)=>{const u=isUnlocked(h,a);if(u)cnt++;const el=document.createElement('button');el.type='button';el.className='badge'+(u?'':' locked');el.setAttribute('aria-label',a.name+(u?' (desbloqueado)':' (bloqueado)'));
+    const cb=document.createElement('div');cb.className='cubeb t'+tierOf(i);const n=document.createElement('span');n.className='n';n.textContent=a.n;const un=document.createElement('span');un.className='u';un.textContent=unitOf(a);cb.append(n,un);
+    const nm=document.createElement('span');nm.className='bn';nm.textContent=a.name;el.append(cb,nm);el.onclick=()=>{if(u)showAch(h,a,i,false);else toast('Bloqueado: '+a.desc)};bg.append(el)});
+  $('achCount').textContent=cnt+' / '+AL.length;
+  // settings
+  $('settingsTitle').textContent='Ajustes de «'+h.name+'»';
+  if(document.activeElement!==$('editName'))$('editName').value=h.name;
+  [...$('goalSeg').children].forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.v===h.goal)));
+  $('startField').hidden=h.kind!=='quit';$('relapseBox').hidden=h.kind!=='quit';$('historyField').hidden=h.kind!=='quit';
+  if(h.kind==='quit'){$('startEdit').value=keyOf(new Date(h.start));$('startEdit').max=todayKey()}
+  $('metricField').hidden=!h.metric;
+  if(h.metric){$('metricLbl').textContent=h.metric.q||'Por día';if(document.activeElement!==$('metricIn'))$('metricIn').value=h.metric.per}
+  const hi=$('history');hi.innerHTML='';
+  if(!h.attempts.length){const p=document.createElement('div');p.textContent='Ninguna todavía.';hi.append(p)}
+  h.attempts.slice().reverse().slice(0,8).forEach(a=>{const r=document.createElement('div');const l=document.createElement('span');l.textContent=fmtDate(a.start)+' → '+fmtDate(a.end);const v=document.createElement('span');v.textContent=a.days+' días';r.append(l,v);hi.append(r)});
+  if(document.activeElement!==$('handle'))$('handle').value=state.handle||'';
+  renderStoreNote();
+  checkNewAch();
+  scheduleShare();
+}
+function renderPact(){
+  const p=state.pledge;
+  $('pactState').textContent=p?'Firmado':'Sin firmar';
+  $('pactBtn').hidden=!!p;
+  const s=$('pactSeal');s.innerHTML='';
+  if(p){const b=document.createElement('b');b.textContent=(state.honestTotal||0);const t=document.createElement('span');t.textContent='registros honestos de recaídas · pacto firmado el '+fmtDate(p);s.append(b,t)}
+  else{const t=document.createElement('span');t.textContent=state.demo?'Lo firmas al empezar tu camino.':'Firma tu pacto para sellar tu compromiso.';s.append(t)}
+}
+
+// ---------- quotes ----------
+let qi=Math.floor(Date.now()/DAY)%QUOTES.length;
+function renderQuote(){$('quote').textContent='«'+QUOTES[qi]+'»'}
+$('nextQuote').onclick=()=>{qi=(qi+1)%QUOTES.length;renderQuote()};
+
+// ---------- achievements ----------
+let queue=[],modalAch=null;
+function checkNewAch(){
+  if(state.demo)return;let changed=false;
+  state.habits.forEach(h=>achList(h).forEach((a,i)=>{if(isUnlocked(h,a)&&!h.seen.includes(a.id)){h.seen.push(a.id);changed=true;queue.push([h,a,i])}}));
+  if(changed){save();if($('achModal').hidden)nextAch()}
+}
+function nextAch(){const q=queue.shift();if(q)showAch(q[0],q[1],q[2],true)}
+function showAch(h,a,i,celebrate){
+  modalAch=[h,a];$('mCube').className='cubeb t'+tierOf(i);$('mN').textContent=a.n;$('mU').textContent=unitOf(a);
+  $('mTitle').textContent=a.name;$('mDesc').textContent=h.name+' · '+a.desc;$('mEyebrow').textContent=celebrate?'¡Logro desbloqueado!':'Logro';
+  $('achModal').hidden=false;$('mShare').focus();if(celebrate)confetti();
+}
+$('mClose').onclick=()=>{$('achModal').hidden=true;setTimeout(nextAch,200)};
+$('mShare').onclick=()=>{const [h,a]=modalAch;state.activeId=h.id;featured=a;$('achModal').hidden=true;queue=[];renderAll();renderShare();$('studio').scrollIntoView({behavior:'smooth'})};
+
+// ---------- modals ----------
+function openModal(id){$(id).hidden=false;const f=$(id).querySelector('button,input');if(f)f.focus()}
+function closeModal(id){$(id).hidden=true}
+['achModal','pactModal','newModal'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id)){if(id==='achModal')$('mClose').click();else closeModal(id)}}));
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('achModal').hidden)$('mClose').click();else{closeModal('pactModal');closeModal('newModal')}});
+
+let afterPact=null;
+function askPact(then){afterPact=then||null;$('pactCheck').checked=false;$('pactSign').disabled=true;openModal('pactModal')}
+$('pactCheck').onchange=()=>{$('pactSign').disabled=!$('pactCheck').checked};
+$('pactCancel').onclick=()=>closeModal('pactModal');
+$('pactSign').onclick=()=>{
+  if(state.demo){state=blank()}
+  state.pledge=Date.now();save();closeModal('pactModal');renderAll();confetti(80);toast('Pacto firmado. Tu palabra es tu prueba.');
+  if(afterPact){const f=afterPact;afterPact=null;setTimeout(f,250)}
+};
+$('pactBtn').onclick=()=>askPact();
+$('startReal').onclick=()=>askPact(()=>openCreator());
+
+// creator
+let nKind='quit',nPreset=null,nGoal=30,nStart='now';
+function segSet(id,v){[...$(id).children].forEach(z=>z.setAttribute('aria-pressed',String(z.dataset.v===String(v))))}
+function segBind(id,cb){$(id).onclick=e=>{const b=e.target.closest('button');if(!b)return;segSet(id,b.dataset.v);cb(b.dataset.v)}}
+function renderPresets(){
+  const c=$('nPresets');c.innerHTML='';
+  PRESETS[nKind].forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.label;b.setAttribute('aria-pressed',String(nPreset&&nPreset.id===p.id));b.onclick=()=>{nPreset=p;$('nName').value=p.name;if(p.id==='otro')$('nName').focus();renderPresets();renderNewMetric()};c.append(b)});
+  $('nStartField').hidden=nKind!=='quit';
+  $('nName').placeholder=nKind==='quit'?'Ej.: Sin azúcar':'Ej.: Leyendo 10 páginas';
+}
+function renderNewMetric(){const m=nPreset&&nPreset.metric;$('nMetricField').hidden=!m||nKind!=='quit';if(m){$('nMetricLbl').textContent=m.q;$('nMetric').value=m.per}}
+function openCreator(){
+  if(state.demo){askPact(()=>openCreator());return}
+  nKind='quit';nPreset=PRESETS.quit[0];nGoal=30;nStart='now';
+  segSet('nKind','quit');segSet('nGoal',30);segSet('nStartMode','now');$('nDate').hidden=true;$('nDate').max=todayKey();$('nDate').value='';
+  $('nName').value=nPreset.name;$('nErr').hidden=true;renderPresets();renderNewMetric();openModal('newModal');
+}
+segBind('nKind',v=>{nKind=v;nPreset=PRESETS[v][0];$('nName').value=nPreset.name;renderPresets();renderNewMetric()});
+segBind('nGoal',v=>{nGoal=+v});
+segBind('nStartMode',v=>{nStart=v;$('nDate').hidden=v!=='date'});
+$('nCancel').onclick=()=>closeModal('newModal');
+$('addHabit').onclick=()=>{if(!state.pledge&&!state.demo){askPact(()=>openCreator());return}openCreator()};
+$('nCreate').onclick=()=>{
+  const name=$('nName').value.trim();const err=$('nErr');
+  if(!name){err.textContent='Escribe tu propósito.';err.hidden=false;return}
+  let start=Date.now();
+  if(nKind==='quit'&&nStart==='date'){const v=$('nDate').value;if(!v){err.textContent='Elige la fecha en que empezaste.';err.hidden=false;return}start=dayMs(v);if(start>Date.now()){err.textContent='La fecha no puede ser futura.';err.hidden=false;return}}
+  let metric=null;if(nKind==='quit'&&nPreset&&nPreset.metric){metric=Object.assign({},nPreset.metric);const v=+$('nMetric').value;if(v>0)metric.per=Math.min(1000,v)}
+  const used=state.habits.map(x=>x.color);let color=[0,1,2,3].find(c=>!used.includes(c));if(color===undefined)color=state.habits.length%4;
+  const h=newHabit({kind:nKind,preset:nPreset?nPreset.id:'otro',name,goal:nGoal,start,metric,color});
+  state.habits.push(h);state.activeId=h.id;featured=null;save();closeModal('newModal');renderAll();confetti(90);
+  toast(nKind==='quit'?'Racha iniciada. Tú puedes.':'Hábito creado. Marca tu primer check-in hoy.');
+  document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'center'});
+};
+
+// ---------- actions ----------
+function needReal(){if(state.demo){const b=$('banner');b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash');b.scrollIntoView({behavior:'smooth',block:'center'});toast('Primero empieza tu propio camino');return true}return false}
+function doCheckin(h){if(needReal())return;const k=todayKey();if(h.checkins.includes(k))return;h.checkins.push(k);save();renderAll();confetti(60);toast(h.kind==='quit'?'+15 XP · Día honesto registrado':'+100 XP · ¡Cumplido hoy!')}
+$('checkin').onclick=()=>{const h=active();if(h)doCheckin(h)};
+$('undo').onclick=()=>{const h=active();if(!h)return;h.checkins=h.checkins.filter(k=>k!==todayKey());save();renderAll();toast('Check-in de hoy deshecho')};
+$('craving').onclick=()=>{
+  if(needReal())return;const h=active();if(!h||h.kind!=='quit')return;
+  if(Date.now()-h.lastCraving<CD){toast('Puedes registrar otro antojo en unos minutos');return}
+  h.cravings++;h.lastCraving=Date.now();save();
+  const t=$('tip');t.hidden=false;t.innerHTML='';const s=document.createElement('strong');s.textContent='+20 XP. ';t.append(s,TIPS[Math.floor(Math.random()*TIPS.length)]+' Próximo registro de antojo en 15 minutos.');
+  t.classList.remove('bump');void t.offsetWidth;t.classList.add('bump');renderAll();
+};
+$('goShare').onclick=()=>$('studio').scrollIntoView({behavior:'smooth'});
+$('saveName').onclick=()=>{if(needReal())return;const h=active();const v=$('editName').value.trim();if(!v){toast('El nombre no puede quedar vacío');return}h.name=v;save();renderAll();toast('Nombre actualizado')};
+segBind('goalSeg',v=>{if(needReal()){renderAll();return}const h=active();h.goal=+v;save();renderAll();toast('Meta: '+goalName(h.goal))});
+$('saveStart').onclick=()=>{if(needReal())return;const h=active();const v=$('startEdit').value;if(!v)return;const ms=dayMs(v);if(ms>Date.now()){toast('La fecha no puede ser futura');return}h.start=ms;save();renderAll();toast('Fecha actualizada')};
+$('saveMetric').onclick=()=>{if(needReal())return;const h=active();const v=+$('metricIn').value;if(!(v>0)){toast('Escribe un número mayor que 0');return}h.metric.per=Math.min(1000,v);save();renderAll();toast('Guardado')};
+$('relapse').onclick=()=>{if(needReal())return;$('relapseConfirm').hidden=false;$('relapse').hidden=true};
+$('relapseNo').onclick=()=>{$('relapseConfirm').hidden=true;$('relapse').hidden=false};
+$('relapseYes').onclick=()=>{
+  const h=active();const now=Date.now(),d=days(h);
+  if(now-h.start>60e3)h.attempts.push({start:h.start,end:now,days:d});
+  h.best=Math.max(h.best,d);h.start=now;h.honest++;state.honestTotal=(state.honestTotal||0)+1;h.checkins=h.checkins.filter(k=>k!==todayKey());
+  save();$('relapseConfirm').hidden=true;$('relapse').hidden=false;featured=null;renderAll();
+  toast('+30 XP por tu honestidad. Tu récord sigue siendo '+h.best+' días.');
+};
+$('del').onclick=()=>{if(needReal())return;$('delConfirm').hidden=false;$('del').hidden=true};
+$('delNo').onclick=()=>{$('delConfirm').hidden=true;$('del').hidden=false};
+$('delYes').onclick=()=>{const h=active();state.habits=state.habits.filter(x=>x.id!==h.id);state.activeId=state.habits[0]?state.habits[0].id:null;save();$('delConfirm').hidden=true;$('del').hidden=false;$('settings').open=false;renderAll();toast('Racha eliminada')};
+let hT;$('handle').oninput=()=>{clearTimeout(hT);hT=setTimeout(()=>{let v=$('handle').value.trim();if(v&&v[0]!=='@')v='@'+v;state.handle=v;save();renderShare()},350)};
+
+// ---------- share card ----------
+const STYLES={
+  menta:{bg:'#1FB57D',ink:'#0B1F15',sub:'#0B1F15',accent:'#FFE066',deco:'rgba(255,255,255,.28)',pill:'#0B1F15',pillInk:'#FFE066'},
+  coral:{bg:'#FF5A4E',ink:'#FFF7F0',sub:'#FFF7F0',accent:'#FFE066',deco:'rgba(255,255,255,.22)',pill:'#FFF7F0',pillInk:'#D6322A'},
+  noche:{bg:'#0D1813',ink:'#E8F4EC',sub:'#93AE9E',accent:'#38D99A',deco:'rgba(56,217,154,.14)',pill:'#38D99A',pillInk:'#0D1813'},
+  limon:{bg:'#FFD233',ink:'#1A1A10',sub:'#3B3A1C',accent:'#FF5A4E',deco:'rgba(255,255,255,.4)',pill:'#1A1A10',pillInk:'#FFD233'}
+};
+let fmt='story',sty='menta',featured=null,shareT=null,fontsReady=false;
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+function seeded(n){let s=n;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+function fitFont(x,text,max,size,family,weight){let fs=size;x.font=(weight||'')+' '+fs+'px '+family;while(x.measureText(text).width>max&&fs>20){fs-=4;x.font=(weight||'')+' '+fs+'px '+family}return fs}
+function drawCard(){
+  const h=active();const W=1080,H=fmt==='story'?1920:1080,S=STYLES[sty],story=fmt==='story';
+  const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const D="'Dela Gothic One','Arial Black',Impact,sans-serif",B="'Figtree',system-ui,sans-serif",M="'IBM Plex Mono',monospace";
+  x.fillStyle=S.bg;x.fillRect(0,0,W,H);
+  const rnd=seeded(7+(story?1:2));
+  for(let i=0;i<(story?16:10);i++){
+    const sz=40+rnd()*90,px=rnd()*W,py=rnd()*H,rot=(rnd()-.5)*1.2;
+    if(py>H*.12&&py<H*.8&&px>W*.1&&px<W*.9)continue;if(py<H*.16&&Math.abs(px-W/2)<W*.4)continue;
+    x.save();x.translate(px,py);x.rotate(rot);x.fillStyle=S.deco;rr(x,-sz/2,-sz/2,sz,sz,sz*.2);x.fill();
+    if(i%3===0){x.strokeStyle=S.accent;x.lineWidth=sz*.1;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(-sz*.3,sz*.12);x.lineTo(0,-sz*.18);x.lineTo(sz*.3,sz*.12);x.stroke()}
+    x.restore();
+  }
+  if(!h)return c;
+  const d=days(h),L=level(),fa=featured||latestBadge(h);
+  x.textAlign='center';x.textBaseline='alphabetic';x.fillStyle=S.ink;
+  x.font='52px '+D;x.fillText('mejor versión',W/2,story?190:110);
+  const num=String(d);let fs=story?500:360;x.font=fs+'px '+D;while(x.measureText(num).width>W*.78&&fs>120){fs-=10;x.font=fs+'px '+D}
+  const cy=story?840:470;
+  x.fillStyle=S.accent;x.fillText(num,W/2+10,cy+10);x.fillStyle=S.ink;x.fillText(num,W/2,cy);
+  fitFont(x,d===1?'DÍA SIENDO MI':'DÍAS SIENDO MI',W*.86,story?78:60,D);x.fillText(d===1?'DÍA SIENDO MI':'DÍAS SIENDO MI',W/2,cy+(story?112:84));
+  fitFont(x,'MEJOR VERSIÓN',W*.86,story?78:60,D);x.fillText('MEJOR VERSIÓN',W/2,cy+(story?200:152));
+  x.fillStyle=S.sub;fitFont(x,h.name,W*.84,story?54:40,B,'700');x.fillText(h.name,W/2,cy+(story?280:212));
+  let y=cy+(story?400:300);
+  if(fa){const label='LOGRO: '+fa.name.toUpperCase();fitFont(x,label,W*.74,story?40:30,M,'600');const tw=x.measureText(label).width+80,ph=story?96:72;
+    x.fillStyle=S.pill;rr(x,W/2-tw/2,y-ph/2,tw,ph,ph/2);x.fill();x.fillStyle=S.pillInk;x.textBaseline='middle';x.fillText(label,W/2,y+2);x.textBaseline='alphabetic'}
+  if(story){
+    y+=210;
+    const pct=Math.min(100,Math.round(daysF(h)/h.goal*100));
+    const cols=h.kind==='quit'?[[h.metric?metricVal(h)+(h.metric.unit==='cig'?'':''):String(h.cravings),h.metric?h.metric.label.toLowerCase():'antojos vencidos'],['Nivel '+(L.i+1),L.name],[pct+'%','de mi meta']]:[[String(h.checkins.length),'días cumplidos'],['Nivel '+(L.i+1),L.name],[pct+'%','de mi meta']];
+    cols.forEach((cc,i)=>{const cx=W/2+(i-1)*330;x.fillStyle=S.ink;fitFont(x,cc[0],300,58,D);x.fillText(cc[0],cx,y);x.fillStyle=S.sub;fitFont(x,cc[1],300,32,B,'600');x.fillText(cc[1],cx,y+54)});
+  }
+  x.fillStyle=S.ink;const foot=(state.handle?state.handle+'  ·  ':'')+'#MiMejorVersión';fitFont(x,foot,W*.86,story?40:32,M,'600');x.fillText(foot,W/2,H-(story?150:64));
+  return c;
+}
+function renderShare(){
+  const h=active();if(!h)return;
+  $('shareImg').src=drawCard().toDataURL('image/png');
+  const d=days(h),fa=featured||latestBadge(h);
+  $('caption').textContent=d+' '+plural(d,'día','días')+' siendo mi mejor versión: '+h.name.toLowerCase()+(fa?'. Desbloqueé «'+fa.name+'»':'')+'. Sin trampas: aquí la honestidad es parte del reto.\n\n#MiMejorVersión #Hábitos #Constancia'+(h.kind==='quit'?' #Reto':' #Disciplina');
+}
+function scheduleShare(){clearTimeout(shareT);shareT=setTimeout(renderShare,fontsReady?50:400)}
+segBind('fmtSeg',v=>{fmt=v;renderShare()});segBind('styleSeg',v=>{sty=v;renderShare()});
+$('saveImg').onclick=async()=>{
+  const h=active();if(!h)return;if(needReal())return;
+  const data=drawCard().toDataURL('image/png');const name='mejor-version-'+days(h)+'-dias-'+fmt+'.png';
+  if(NATIVE&&P.Filesystem&&P.Share){
+    try{
+      const w=await P.Filesystem.writeFile({path:name,data:data.split(',')[1],directory:'CACHE'});
+      await P.Share.share({title:'Mi mejor versión',text:$('caption').textContent,files:[w.uri],dialogTitle:'Compartir en…'});
+    }catch(e){if(!/cancel/i.test(String(e&&e.message)))toast('No se pudo compartir. Inténtalo de nuevo')}
+    return;
+  }
+  try{
+    const blob=await (await fetch(data)).blob();const file=new File([blob],name,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Mi mejor versión',text:$('caption').textContent});return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=data;a.download=name;document.body.append(a);a.click();a.remove();toast('Imagen descargada');
+};
+$('copyCap').onclick=()=>{
+  const t=$('caption').textContent;
+  const fb=()=>{const r=document.createRange();r.selectNodeContents($('caption'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Texto seleccionado: cópialo')};
+  try{navigator.clipboard.writeText(t).then(()=>toast('Texto copiado'),fb)}catch(e){fb()}
+};
+
+// ---------- fx ----------
+let tT;function toast(msg){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.append(el)}el.textContent=msg;el.hidden=false;clearTimeout(tT);tT=setTimeout(()=>el.hidden=true,2600)}
+function confetti(count){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cv=$('confetti'),x=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+  const cs=getComputedStyle(document.documentElement);const cols=['--mint','--coral','--butter','--sky'].map(v=>cs.getPropertyValue(v).trim());
+  const P=[];for(let i=0;i<(count||140);i++)P.push({x:cv.width/2+(Math.random()-.5)*120,y:cv.height*.35,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,s:6+Math.random()*10,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[i%4]});
+  let t=0;(function f(){x.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s);x.restore()});if(++t<150)requestAnimationFrame(f);else x.clearRect(0,0,cv.width,cv.height)})();
+}
+
+// ---------- recordatorios (notificaciones locales) ----------
+function defRem(){return {quote:false,quoteTime:'08:00',check:false,checkTime:'20:30'}}
+function rem(){return Object.assign(defRem(),state.rem||{})}
+function hm(t){const [h,m]=(t||'08:00').split(':').map(Number);return [h||0,m||0]}
+function renderRem(){
+  const r=rem();
+  $('remQuote').checked=r.quote;$('remCheck').checked=r.check;
+  if(document.activeElement!==$('remQuoteTime'))$('remQuoteTime').value=r.quoteTime;
+  if(document.activeElement!==$('remCheckTime'))$('remCheckTime').value=r.checkTime;
+  $('remState').textContent=(r.quote||r.check)?'Activos':'Apagados';
+  if(!NATIVE){['remQuote','remCheck','remQuoteTime','remCheckTime','remSave'].forEach(id=>$(id).disabled=true);$('remState').textContent='Próximamente';$('remNote').textContent='Los recordatorios diarios llegan con la versión de Google Play. En esta versión de prueba aún no están activos.'}
+}
+async function scheduleReminders(){
+  const LN=P.LocalNotifications;if(!NATIVE||!LN||state.demo)return;
+  try{
+    const pend=await LN.getPending();
+    if(pend&&pend.notifications&&pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
+    const r=rem(),list=[],now=Date.now();
+    const allDone=state.habits.length>0&&state.habits.every(doneToday);
+    for(let i=0;i<21;i++){
+      const base=new Date();base.setDate(base.getDate()+i);
+      if(r.quote){const [h,m]=hm(r.quoteTime);const at=new Date(base);at.setHours(h,m,0,0);
+        if(at.getTime()>now){const idx=Math.floor(new Date(at.getFullYear(),at.getMonth(),at.getDate(),12).getTime()/DAY)%QUOTES.length;
+          list.push({id:1000+i,title:'Tu frase de hoy',body:QUOTES[idx],largeBody:QUOTES[idx],schedule:{at,allowWhileIdle:true}})}}
+      if(r.check&&state.habits.length){const [h,m]=hm(r.checkTime);const at=new Date(base);at.setHours(h,m,0,0);
+        if(at.getTime()>now&&!(i===0&&allDone)){
+          let body='Marca tus check-ins de hoy. Solo cuenta si es verdad.';
+          if(i===0){const pend=state.habits.filter(x=>!doneToday(x)).map(x=>x.name);if(pend.length)body='Te falta: '+pend.slice(0,3).join(', ')+(pend.length>3?'…':'')+'. Solo cuenta si es verdad.'}
+          list.push({id:2000+i,title:'¿Fuiste tu mejor versión hoy?',body,largeBody:body,schedule:{at,allowWhileIdle:true}})}}
+    }
+    if(list.length)await LN.schedule({notifications:list});
+  }catch(e){}
+}
+$('remSave').onclick=async()=>{
+  if(needReal())return;
+  const r={quote:$('remQuote').checked,quoteTime:$('remQuoteTime').value||'08:00',check:$('remCheck').checked,checkTime:$('remCheckTime').value||'20:30'};
+  state.rem=r;
+  if((r.quote||r.check)&&NATIVE&&P.LocalNotifications){
+    try{const perm=await P.LocalNotifications.requestPermissions();
+      if(perm.display!=='granted'){$('remNote').textContent='Las notificaciones están bloqueadas. Actívalas en Ajustes del teléfono > Apps > Mejor Versión > Notificaciones.'}
+      else $('remNote').textContent='';
+    }catch(e){}
+  }
+  save();renderRem();await scheduleReminders();
+  toast((r.quote||r.check)?'Recordatorios guardados':'Recordatorios apagados');
+};
+
+// ---------- app web instalable (PWA) ----------
+let deferredInstall=null;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+function installDismissed(){try{return localStorage.getItem('mv.installClosed')==='1'}catch(e){return false}}
+function showInstall(){
+  if(NATIVE||isStandalone()||installDismissed())return;
+  if(isIOS){$('installHow').textContent='En Safari: toca Compartir y luego "Agregar a inicio".';$('installBtn').hidden=true;$('installBar').hidden=false}
+  else if(deferredInstall){$('installBar').hidden=false}
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;showInstall()});
+window.addEventListener('appinstalled',()=>{$('installBar').hidden=true;toast('App instalada')});
+$('installBtn').onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();try{await deferredInstall.userChoice}catch(e){}deferredInstall=null;$('installBar').hidden=true};
+$('installClose').onclick=()=>{$('installBar').hidden=true;try{localStorage.setItem('mv.installClosed','1')}catch(e){}};
+if(!NATIVE&&'serviceWorker' in navigator&&location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+
+// ---------- boot ----------
+async function boot(){
+  const stored=await readStored();
+  if(stored&&(stored.habits.length||stored.pledge))state=stored;
+  renderQuote();renderAll();renderRem();
+  $('saveImg').textContent=NATIVE?'Compartir imagen':'Descargar imagen';
+  let lastDay=todayKey();
+  setInterval(()=>{renderHero();const k=todayKey();if(k!==lastDay||new Date().getSeconds()===0){lastDay=k;renderAll()}},1000);
+  if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load('100px "Dela Gothic One"'),document.fonts.load('700 40px "Figtree"'),document.fonts.load('600 40px "IBM Plex Mono"')]).then(()=>{fontsReady=true;renderShare()}).catch(()=>{})}
+  if(NATIVE&&P.App){
+    P.App.addListener('backButton',()=>{
+      const open=['achModal','pactModal','newModal'].find(id=>!$(id).hidden);
+      if(open){if(open==='achModal')$('mClose').click();else closeModal(open);return}
+      if($('settings').open){$('settings').open=false;return}
+      P.App.minimizeApp();
+    });
+    P.App.addListener('resume',()=>{renderAll();scheduleReminders()});
+  }
+  scheduleReminders();
+  showInstall();
+}
+boot();
+})();
+</script>
+</body>
+</html>
