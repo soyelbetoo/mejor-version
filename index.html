@@ -98,6 +98,26 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hcheck{flex:none;border:0;border-radius:12px;padding:9px 10px;font-weight:800;font-size:.85rem;background:var(--ink);color:var(--bg)}
 .hcheck.done{background:var(--mint-soft);color:var(--ink);cursor:default}
 .add-row{display:flex;gap:10px;flex-wrap:wrap}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sum{border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;min-width:0}
+.sum b{font-family:var(--f-display);font-weight:400;font-size:1.5rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.sum span{font-size:.78rem;font-weight:700;line-height:1.2}
+.sum.q{background:var(--coral-soft)} .sum.b{background:var(--mint-soft)} .sum.t{background:var(--butter-soft)}
+.group{display:flex;flex-direction:column;gap:8px}
+.group-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.gtitle{font-family:var(--f-display);font-size:1rem;display:flex;align-items:center;gap:8px}
+.gtitle::before{content:"";width:10px;height:10px;border-radius:3px;transform:rotate(-8deg)}
+.group.q .gtitle::before{background:var(--coral)} .group.b .gtitle::before{background:var(--mint)}
+.addbtn{border:2px dashed var(--line);background:none;border-radius:14px;padding:11px;font-weight:800;font-size:.92rem;color:var(--muted);text-align:center}
+.addbtn:hover{border-color:var(--ink);color:var(--ink)}
+.empty{font-size:.88rem;color:var(--muted);margin:0;padding:4px 2px}
+details.conquered{border-top:1px dashed var(--line);padding-top:10px}
+details.conquered summary{cursor:pointer;font-weight:800;list-style:none;display:flex;justify-content:space-between}
+details.conquered summary::-webkit-details-marker{display:none}
+details.conquered summary::after{content:"+";font-family:var(--f-mono)}
+details.conquered[open] summary::after{content:"–"}
+details.conquered .hlist{margin-top:10px}
+.hrow.done-row{background:var(--butter-soft)}
 .xp{display:flex;flex-direction:column;gap:6px}
 .xp-bar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
 .xp-fill{height:100%;background:repeating-linear-gradient(-45deg,var(--butter) 0 10px,color-mix(in srgb,var(--butter) 80%,var(--coral)) 10px 20px);border-radius:999px;transition:width .8s ease}
@@ -252,9 +272,23 @@ details.settings[open] summary::after{content:"–"}
   </section>
 
   <section class="card" aria-label="Tus rachas">
-    <div class="card-head"><h2>Tus rachas</h2><span class="eyebrow" id="todayCount">0 / 0 hoy</span></div>
-    <div class="hlist" id="hlist"></div>
-    <div class="add-row"><button class="btn btn-ghost btn-small" id="addHabit">+ Nueva racha</button></div>
+    <div class="card-head"><h2>Tu tablero</h2><span class="eyebrow" id="todayCount">0 / 0 hoy</span></div>
+    <div class="summary">
+      <div class="sum q"><b id="sumQuit">0</b><span>vicios dejando</span></div>
+      <div class="sum b"><b id="sumBuild">0</b><span>hábitos creando</span></div>
+      <div class="sum t"><b id="sumToday">0/0</b><span>check-ins hoy</span></div>
+    </div>
+    <div class="group q">
+      <div class="group-head"><span class="gtitle">Dejando</span><span class="hint">lo que estás soltando</span></div>
+      <div class="hlist" id="hlistQuit"></div>
+      <button class="addbtn" id="addQuit" type="button">+ Dejar otro vicio</button>
+    </div>
+    <div class="group b">
+      <div class="group-head"><span class="gtitle">Construyendo</span><span class="hint">lo que estás sumando</span></div>
+      <div class="hlist" id="hlistBuild"></div>
+      <button class="addbtn" id="addBuild" type="button">+ Crear otro hábito</button>
+    </div>
+    <details class="conquered" id="conquered" hidden><summary>Conquistados (<span id="conqN">0</span>)</summary><div class="hlist" id="hlistDone"></div></details>
     <div class="xp">
       <div class="xp-meta"><span id="xpNow">0 XP</span><span id="xpNext">300 XP para Aprendiz</span></div>
       <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
@@ -303,6 +337,9 @@ details.settings[open] summary::after{content:"–"}
 
   <section class="card" id="studio" aria-label="Compartir">
     <div class="card-head"><h2>Estudio para Instagram</h2><span class="eyebrow">PNG listo para subir</span></div>
+    <div class="field"><span class="lbl">Qué compartir</span>
+      <div class="seg" id="whatSeg"><button data-v="one" aria-pressed="true">Esta racha</button><button data-v="all" aria-pressed="false">Todo mi tablero</button></div>
+    </div>
     <div class="field"><span class="lbl">Formato</span>
       <div class="seg" id="fmtSeg"><button data-v="story" aria-pressed="true">Historia 9:16</button><button data-v="post" aria-pressed="false">Post 1:1</button></div>
     </div>
@@ -351,6 +388,10 @@ details.settings[open] summary::after{content:"–"}
         <div id="relapseConfirm" hidden class="inline"><span style="font-weight:700">¿Reiniciar esta racha?</span><button class="btn btn-ink btn-small" id="relapseYes">Sí, empiezo de nuevo</button><button class="btn btn-ghost btn-small" id="relapseNo">Cancelar</button></div>
       </div>
       <div class="field" id="historyField"><span class="lbl">Rachas anteriores</span><div class="history" id="history"></div></div>
+      <div class="warn-box" style="background:var(--mint-soft)">
+        <p><strong>¿Ya lo conquistaste?</strong> Pásalo a «Conquistados». Se guarda con su récord y deja de pedirte check-in. Puedes reactivarlo cuando quieras.</p>
+        <button class="btn btn-ghost btn-small" id="archive">Mover a Conquistados</button>
+      </div>
       <div class="warn-box">
         <button class="btn btn-ghost btn-small" id="del">Eliminar esta racha</button>
         <div id="delConfirm" hidden class="inline"><span style="font-weight:700">Se borra todo su historial.</span><button class="btn btn-coral btn-small" id="delYes">Eliminar</button><button class="btn btn-ghost btn-small" id="delNo">Cancelar</button></div>
@@ -386,6 +427,21 @@ details.settings[open] summary::after{content:"–"}
     </ul>
     <label class="check-line"><input type="checkbox" id="pactCheck">Hago este pacto conmigo mismo</label>
     <div class="row"><button class="btn btn-ghost" id="pactCancel">Ahora no</button><button class="btn btn-primary" id="pactSign" disabled>Firmar mi pacto</button></div>
+  </div>
+</div>
+
+<!-- plan modal -->
+<div class="modal" id="planModal" hidden role="dialog" aria-modal="true" aria-labelledby="plTitle">
+  <div class="modal-card">
+    <span class="eyebrow">Tu plan de vida</span>
+    <h3 id="plTitle">¿Qué quieres trabajar?</h3>
+    <p class="hint">Elige todo lo que quieras, de los dos lados. A lo largo del año podrás sumar nuevas rachas o mover a «Conquistados» las que ya lograste.</p>
+    <div class="field"><span class="lbl">Quiero dejar</span><div class="chips" id="plQuit"></div></div>
+    <div class="field"><span class="lbl">Quiero construir</span><div class="chips" id="plBuild"></div></div>
+    <div class="field"><span class="lbl">Meta inicial para todas</span>
+      <div class="seg" id="plGoal"><button data-v="7" aria-pressed="false">Semana</button><button data-v="30" aria-pressed="true">Mes</button><button data-v="365" aria-pressed="false">Año</button></div></div>
+    <p class="hint" id="plErr" hidden style="color:var(--coral);font-weight:700"></p>
+    <div class="row"><button class="btn btn-ghost" id="plCustom">Escribir una propia</button><button class="btn btn-primary" id="plCreate">Crear mis rachas</button></div>
   </div>
 </div>
 
@@ -467,9 +523,9 @@ function demoState(){
 // ---------- derived ----------
 function streakBuild(h){const set=new Set(h.checkins);let d=new Date();if(!set.has(keyOf(d)))d=new Date(Date.now()-DAY);let n=0;while(set.has(keyOf(d))){n++;d=new Date(d.getTime()-DAY)}return n}
 function longestRun(keys){const ms=[...new Set(keys)].map(dayMs).sort((a,b)=>a-b);let best=0,run=0,prev=null;ms.forEach(m=>{run=(prev!==null&&Math.round((m-prev)/DAY)===1)?run+1:1;best=Math.max(best,run);prev=m});return best}
-function daysF(h){return h.kind==='quit'?Math.max(0,(Date.now()-h.start)/DAY):streakBuild(h)}
+function daysF(h){if(h.archived)return h.archivedDays||0;return h.kind==='quit'?Math.max(0,(Date.now()-h.start)/DAY):streakBuild(h)}
 function days(h){return Math.floor(daysF(h))}
-function bestOf(h){return h.kind==='quit'?Math.max(h.best||0,days(h)):Math.max(h.best||0,longestRun(h.checkins))}
+function bestOf(h){if(h.archived)return Math.max(h.best||0,h.archivedDays||0);return h.kind==='quit'?Math.max(h.best||0,days(h)):Math.max(h.best||0,longestRun(h.checkins))}
 function doneToday(h){return h.checkins.includes(todayKey())}
 function habitXP(h){if(h.kind==='quit'){const d=h.attempts.reduce((a,b)=>a+(b.days||0),0)+days(h);return d*100+h.cravings*20+h.checkins.length*15+h.honest*30}return h.checkins.length*100}
 function xp(){return state.habits.reduce((a,h)=>a+habitXP(h),0)}
@@ -485,7 +541,8 @@ function isUnlocked(h,a){const b=bestOf(h);return a.k==='days'?b>=a.n:a.k==='goa
 function unitOf(a){return a.k==='days'?plural(a.n,'día','días'):a.k==='goal'?'meta':a.k==='crav'?'antojos':'veces'}
 function tierOf(i){return i%4}
 function latestBadge(h){const u=achList(h).filter(a=>a.k==='days'&&isUnlocked(h,a));return u.length?u[u.length-1]:null}
-function active(){return state.habits.find(h=>h.id===state.activeId)||null}
+function live(){return state.habits.filter(h=>!h.archived)}
+function active(){return state.habits.find(h=>h.id===state.activeId&&!h.archived)||live()[0]||null}
 function metricVal(h){if(!h.metric)return null;const v=daysF(h)*h.metric.per;if(h.metric.unit==='g')return v>=1000?(v/1000).toLocaleString('es',{maximumFractionDigits:1})+' kg':Math.round(v).toLocaleString('es')+' g';return Math.floor(v).toLocaleString('es')}
 function monoLetter(h){const n=(h.name||'?').replace(/^(sin|dejar)\s+(el\s+|la\s+|los\s+|las\s+)?/i,'');return (n[0]||'?').toUpperCase()}
 
@@ -545,24 +602,40 @@ function renderAll(){
   $('xpNow').textContent='Nivel '+(L.i+1)+' · '+L.x.toLocaleString('es')+' XP';
   $('xpNext').textContent=L.next?(L.next[0]-L.x).toLocaleString('es')+' XP para '+L.next[1]:'Nivel máximo';
   $('xpFill').style.width=(L.next?((L.x-L.base)/(L.next[0]-L.base)*100):100).toFixed(1)+'%';
-  // list
-  const list=$('hlist');list.innerHTML='';let doneN=0;
-  if(!state.habits.length){const p=document.createElement('p');p.className='hint';p.textContent='Aún no tienes rachas. Crea la primera con «+ Nueva racha».';list.append(p)}
-  state.habits.forEach(x=>{
-    const done=doneToday(x);if(done)doneN++;
-    const row=document.createElement('div');row.className='hrow'+(x.id===state.activeId?' active':'');
+  // tablero
+  const L2=live(),quits=L2.filter(x=>x.kind==='quit'),builds=L2.filter(x=>x.kind!=='quit'),conq=state.habits.filter(x=>x.archived);
+  const doneN=L2.filter(doneToday).length;
+  const mkRow=x=>{
+    const done=doneToday(x);
+    const row=document.createElement('div');row.className='hrow'+(x.id===(h&&h.id)?' active':'');
     const sel=document.createElement('button');sel.className='hsel';sel.type='button';
     const m=document.createElement('span');m.className='mono t'+x.color+(x.kind==='quit'?' quit':'');m.textContent=monoLetter(x);
     const info=document.createElement('span');info.className='hinfo';
     const n=document.createElement('span');n.className='hname';n.textContent=x.name;
-    const meta=document.createElement('span');meta.className='hmeta';const dd=days(x);meta.textContent=(x.kind==='quit'?'Dejar':'Crear')+' · '+dd+' '+plural(dd,'día','días')+' · meta '+x.goal;
-    info.append(n,meta);sel.append(m,info);sel.onclick=()=>{state.activeId=x.id;featured=null;save();renderAll()};
+    const meta=document.createElement('span');meta.className='hmeta';const dd=days(x);meta.textContent=dd+' '+plural(dd,'día','días')+' · meta '+goalName(x.goal);
+    info.append(n,meta);sel.append(m,info);sel.onclick=()=>{state.activeId=x.id;featured=null;save();renderAll();document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'})};
     const c=document.createElement('button');c.type='button';c.className='hcheck'+(done?' done':'');c.textContent=done?'Hoy ✓':'Marcar hoy';
     c.setAttribute('aria-label',(done?'Check-in hecho: ':'Marcar check-in: ')+x.name);
     c.onclick=()=>{if(!done)doCheckin(x)};
-    row.append(sel,c);list.append(row);
+    row.append(sel,c);return row;
+  };
+  const fill=(id,arr,empty)=>{const el=$(id);el.innerHTML='';if(!arr.length){const p=document.createElement('p');p.className='empty';p.textContent=empty;el.append(p)}arr.forEach(x=>el.append(mkRow(x)))};
+  fill('hlistQuit',quits,'Ningún vicio por ahora. ¿Hay algo que quieras soltar?');
+  fill('hlistBuild',builds,'Ningún hábito por ahora. ¿Qué quieres sumar a tu vida?');
+  $('sumQuit').textContent=quits.length;$('sumBuild').textContent=builds.length;$('sumToday').textContent=doneN+'/'+L2.length;
+  $('todayCount').textContent=doneN+' / '+L2.length+' hoy';
+  $('conquered').hidden=!conq.length;$('conqN').textContent=conq.length;
+  const dl=$('hlistDone');dl.innerHTML='';
+  conq.forEach(x=>{
+    const row=document.createElement('div');row.className='hrow done-row';
+    const info=document.createElement('div');info.className='hinfo';info.style.flex='1';
+    const n=document.createElement('span');n.className='hname';n.textContent=x.name;
+    const meta=document.createElement('span');meta.className='hmeta';meta.textContent=(x.kind==='quit'?'Dejado':'Construido')+' · récord '+bestOf(x)+' días · '+fmtDate(x.archived);
+    info.append(n,meta);
+    const r=document.createElement('button');r.type='button';r.className='hcheck';r.textContent='Reactivar';
+    r.onclick=()=>{if(needReal())return;if(x.kind==='quit')x.start=Date.now()-(x.archivedDays||0)*DAY;delete x.archived;delete x.archivedDays;state.activeId=x.id;save();renderAll();toast('«'+x.name+'» está activa otra vez')};
+    row.append(info,r);dl.append(row);
   });
-  $('todayCount').textContent=doneN+' / '+state.habits.length+' hoy';
   const has=!!h;
   document.querySelectorAll('.hero,.actions,#studio,#settings').forEach(e=>e.hidden=!has);
   document.querySelectorAll('.card[aria-label="Semana"],.card[aria-label="Estadísticas"],.card[aria-label="Logros"]').forEach(e=>e.hidden=!has);
@@ -637,7 +710,7 @@ $('nextQuote').onclick=()=>{qi=(qi+1)%QUOTES.length;renderQuote()};
 let queue=[],modalAch=null;
 function checkNewAch(){
   if(state.demo)return;let changed=false;
-  state.habits.forEach(h=>achList(h).forEach((a,i)=>{if(isUnlocked(h,a)&&!h.seen.includes(a.id)){h.seen.push(a.id);changed=true;queue.push([h,a,i])}}));
+  live().forEach(h=>achList(h).forEach((a,i)=>{if(isUnlocked(h,a)&&!h.seen.includes(a.id)){h.seen.push(a.id);changed=true;queue.push([h,a,i])}}));
   if(changed){save();if($('achModal').hidden)nextAch()}
 }
 function nextAch(){const q=queue.shift();if(q)showAch(q[0],q[1],q[2],true)}
@@ -652,8 +725,8 @@ $('mShare').onclick=()=>{const [h,a]=modalAch;state.activeId=h.id;featured=a;$('
 // ---------- modals ----------
 function openModal(id){$(id).hidden=false;const f=$(id).querySelector('button,input');if(f)f.focus()}
 function closeModal(id){$(id).hidden=true}
-['achModal','pactModal','newModal'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id)){if(id==='achModal')$('mClose').click();else closeModal(id)}}));
-document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('achModal').hidden)$('mClose').click();else{closeModal('pactModal');closeModal('newModal')}});
+['achModal','pactModal','newModal','planModal'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target===$(id)){if(id==='achModal')$('mClose').click();else closeModal(id)}}));
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('achModal').hidden)$('mClose').click();else{closeModal('pactModal');closeModal('newModal');closeModal('planModal')}});
 
 let afterPact=null;
 function askPact(then){afterPact=then||null;$('pactCheck').checked=false;$('pactSign').disabled=true;openModal('pactModal')}
@@ -665,7 +738,7 @@ $('pactSign').onclick=()=>{
   if(afterPact){const f=afterPact;afterPact=null;setTimeout(f,250)}
 };
 $('pactBtn').onclick=()=>askPact();
-$('startReal').onclick=()=>askPact(()=>openCreator());
+$('startReal').onclick=()=>askPact(()=>openPlan());
 
 // creator
 let nKind='quit',nPreset=null,nGoal=30,nStart='now';
@@ -673,29 +746,56 @@ function segSet(id,v){[...$(id).children].forEach(z=>z.setAttribute('aria-presse
 function segBind(id,cb){$(id).onclick=e=>{const b=e.target.closest('button');if(!b)return;segSet(id,b.dataset.v);cb(b.dataset.v)}}
 function renderPresets(){
   const c=$('nPresets');c.innerHTML='';
-  PRESETS[nKind].forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.label;b.setAttribute('aria-pressed',String(nPreset&&nPreset.id===p.id));b.onclick=()=>{nPreset=p;$('nName').value=p.name;if(p.id==='otro')$('nName').focus();renderPresets();renderNewMetric()};c.append(b)});
+  const usedP=live().map(x=>x.preset);
+  PRESETS[nKind].forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.label;if(p.id!=='otro'&&usedP.includes(p.id)){b.disabled=true;b.title='Ya la tienes';b.style.opacity='.4'}b.setAttribute('aria-pressed',String(nPreset&&nPreset.id===p.id));b.onclick=()=>{nPreset=p;$('nName').value=p.name;if(p.id==='otro')$('nName').focus();renderPresets();renderNewMetric()};c.append(b)});
   $('nStartField').hidden=nKind!=='quit';
   $('nName').placeholder=nKind==='quit'?'Ej.: Sin azúcar':'Ej.: Leyendo 10 páginas';
 }
 function renderNewMetric(){const m=nPreset&&nPreset.metric;$('nMetricField').hidden=!m||nKind!=='quit';if(m){$('nMetricLbl').textContent=m.q;$('nMetric').value=m.per}}
-function openCreator(){
-  if(state.demo){askPact(()=>openCreator());return}
-  nKind='quit';nPreset=PRESETS.quit[0];nGoal=30;nStart='now';
-  segSet('nKind','quit');segSet('nGoal',30);segSet('nStartMode','now');$('nDate').hidden=true;$('nDate').max=todayKey();$('nDate').value='';
+function openCreator(kind){
+  kind=kind==='build'?'build':'quit';
+  if(state.demo){askPact(()=>openPlan());return}
+  if(!state.pledge){askPact(()=>openCreator(kind));return}
+  const usedP=live().map(x=>x.preset);
+  nKind=kind;nPreset=PRESETS[kind].find(p=>p.id==='otro'||!usedP.includes(p.id));nGoal=30;nStart='now';
+  segSet('nKind',kind);segSet('nGoal',30);segSet('nStartMode','now');$('nDate').hidden=true;$('nDate').max=todayKey();$('nDate').value='';
   $('nName').value=nPreset.name;$('nErr').hidden=true;renderPresets();renderNewMetric();openModal('newModal');
 }
 segBind('nKind',v=>{nKind=v;nPreset=PRESETS[v][0];$('nName').value=nPreset.name;renderPresets();renderNewMetric()});
 segBind('nGoal',v=>{nGoal=+v});
 segBind('nStartMode',v=>{nStart=v;$('nDate').hidden=v!=='date'});
 $('nCancel').onclick=()=>closeModal('newModal');
-$('addHabit').onclick=()=>{if(!state.pledge&&!state.demo){askPact(()=>openCreator());return}openCreator()};
+$('addQuit').onclick=()=>openCreator('quit');
+$('addBuild').onclick=()=>openCreator('build');
+// plan inicial: varias rachas a la vez
+let plSel=new Set(),plGoal=30;
+function renderPlan(){
+  const usedP=live().map(x=>x.preset);
+  [['plQuit','quit'],['plBuild','build']].forEach(([id,k])=>{const c=$(id);c.innerHTML='';
+    PRESETS[k].filter(p=>p.id!=='otro'&&!usedP.includes(p.id)).forEach(p=>{const key=k+':'+p.id;const b=document.createElement('button');b.type='button';b.textContent=p.label;b.setAttribute('aria-pressed',String(plSel.has(key)));
+      b.onclick=()=>{plSel.has(key)?plSel.delete(key):plSel.add(key);renderPlan()};c.append(b)})});
+  const n=plSel.size;$('plCreate').textContent=n?'Crear '+n+' '+plural(n,'racha','rachas'):'Crear mis rachas';
+}
+function openPlan(){if(state.demo){askPact(()=>openPlan());return}plSel=new Set();plGoal=30;segSet('plGoal',30);$('plErr').hidden=true;renderPlan();openModal('planModal')}
+segBind('plGoal',v=>{plGoal=+v});
+$('plCustom').onclick=()=>{closeModal('planModal');setTimeout(()=>openCreator('quit'),150)};
+$('plCreate').onclick=()=>{
+  if(!plSel.size){$('plErr').textContent='Elige al menos una opción, o escribe una propia.';$('plErr').hidden=false;return}
+  let first=null;
+  [...plSel].forEach(key=>{const [k,id]=key.split(':');const p=PRESETS[k].find(z=>z.id===id);
+    const used=live().map(x=>x.color);let color=[0,1,2,3].find(c=>!used.includes(c));if(color===undefined)color=state.habits.length%4;
+    const h=newHabit({kind:k,preset:p.id,name:p.name,goal:plGoal,start:Date.now(),metric:p.metric?Object.assign({},p.metric):null,color});
+    state.habits.push(h);if(!first)first=h});
+  state.activeId=first.id;featured=null;save();closeModal('planModal');renderAll();confetti(120);
+  toast('¡Tu plan está listo! '+plSel.size+' rachas en marcha.');
+};
 $('nCreate').onclick=()=>{
   const name=$('nName').value.trim();const err=$('nErr');
   if(!name){err.textContent='Escribe tu propósito.';err.hidden=false;return}
   let start=Date.now();
   if(nKind==='quit'&&nStart==='date'){const v=$('nDate').value;if(!v){err.textContent='Elige la fecha en que empezaste.';err.hidden=false;return}start=dayMs(v);if(start>Date.now()){err.textContent='La fecha no puede ser futura.';err.hidden=false;return}}
   let metric=null;if(nKind==='quit'&&nPreset&&nPreset.metric){metric=Object.assign({},nPreset.metric);const v=+$('nMetric').value;if(v>0)metric.per=Math.min(1000,v)}
-  const used=state.habits.map(x=>x.color);let color=[0,1,2,3].find(c=>!used.includes(c));if(color===undefined)color=state.habits.length%4;
+  const used=live().map(x=>x.color);let color=[0,1,2,3].find(c=>!used.includes(c));if(color===undefined)color=state.habits.length%4;
   const h=newHabit({kind:nKind,preset:nPreset?nPreset.id:'otro',name,goal:nGoal,start,metric,color});
   state.habits.push(h);state.activeId=h.id;featured=null;save();closeModal('newModal');renderAll();confetti(90);
   toast(nKind==='quit'?'Racha iniciada. Tú puedes.':'Hábito creado. Marca tu primer check-in hoy.');
@@ -730,17 +830,18 @@ $('relapseYes').onclick=()=>{
 };
 $('del').onclick=()=>{if(needReal())return;$('delConfirm').hidden=false;$('del').hidden=true};
 $('delNo').onclick=()=>{$('delConfirm').hidden=true;$('del').hidden=false};
-$('delYes').onclick=()=>{const h=active();state.habits=state.habits.filter(x=>x.id!==h.id);state.activeId=state.habits[0]?state.habits[0].id:null;save();$('delConfirm').hidden=true;$('del').hidden=false;$('settings').open=false;renderAll();toast('Racha eliminada')};
+$('archive').onclick=()=>{if(needReal())return;const h=active();if(!h)return;h.archivedDays=days(h);h.best=Math.max(h.best||0,h.archivedDays);h.archived=Date.now();state.activeId=live()[0]?live()[0].id:null;save();$('settings').open=false;renderAll();confetti(120);toast('¡Conquistado! «'+h.name+'» ahora está en Conquistados.')};
+$('delYes').onclick=()=>{const h=active();state.habits=state.habits.filter(x=>x.id!==h.id);state.activeId=live()[0]?live()[0].id:null;save();$('delConfirm').hidden=true;$('del').hidden=false;$('settings').open=false;renderAll();toast('Racha eliminada')};
 let hT;$('handle').oninput=()=>{clearTimeout(hT);hT=setTimeout(()=>{let v=$('handle').value.trim();if(v&&v[0]!=='@')v='@'+v;state.handle=v;save();renderShare()},350)};
 
 // ---------- share card ----------
 const STYLES={
-  menta:{bg:'#1FB57D',ink:'#0B1F15',sub:'#0B1F15',accent:'#FFE066',deco:'rgba(255,255,255,.28)',pill:'#0B1F15',pillInk:'#FFE066'},
-  coral:{bg:'#FF5A4E',ink:'#FFF7F0',sub:'#FFF7F0',accent:'#FFE066',deco:'rgba(255,255,255,.22)',pill:'#FFF7F0',pillInk:'#D6322A'},
-  noche:{bg:'#0D1813',ink:'#E8F4EC',sub:'#93AE9E',accent:'#38D99A',deco:'rgba(56,217,154,.14)',pill:'#38D99A',pillInk:'#0D1813'},
-  limon:{bg:'#FFD233',ink:'#1A1A10',sub:'#3B3A1C',accent:'#FF5A4E',deco:'rgba(255,255,255,.4)',pill:'#1A1A10',pillInk:'#FFD233'}
+  menta:{row:'rgba(11,31,21,.12)',bg:'#1FB57D',ink:'#0B1F15',sub:'#0B1F15',accent:'#FFE066',deco:'rgba(255,255,255,.28)',pill:'#0B1F15',pillInk:'#FFE066'},
+  coral:{row:'rgba(255,255,255,.16)',bg:'#FF5A4E',ink:'#FFF7F0',sub:'#FFF7F0',accent:'#FFE066',deco:'rgba(255,255,255,.22)',pill:'#FFF7F0',pillInk:'#D6322A'},
+  noche:{row:'rgba(255,255,255,.07)',bg:'#0D1813',ink:'#E8F4EC',sub:'#93AE9E',accent:'#38D99A',deco:'rgba(56,217,154,.14)',pill:'#38D99A',pillInk:'#0D1813'},
+  limon:{row:'rgba(26,26,16,.1)',bg:'#FFD233',ink:'#1A1A10',sub:'#3B3A1C',accent:'#FF5A4E',deco:'rgba(255,255,255,.4)',pill:'#1A1A10',pillInk:'#FFD233'}
 };
-let fmt='story',sty='menta',featured=null,shareT=null,fontsReady=false;
+let fmt='story',sty='menta',what='one',featured=null,shareT=null,fontsReady=false;
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function seeded(n){let s=n;return()=>{s=(s*9301+49297)%233280;return s/233280}}
 function fitFont(x,text,max,size,family,weight){let fs=size;x.font=(weight||'')+' '+fs+'px '+family;while(x.measureText(text).width>max&&fs>20){fs-=4;x.font=(weight||'')+' '+fs+'px '+family}return fs}
@@ -757,6 +858,7 @@ function drawCard(){
     if(i%3===0){x.strokeStyle=S.accent;x.lineWidth=sz*.1;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(-sz*.3,sz*.12);x.lineTo(0,-sz*.18);x.lineTo(sz*.3,sz*.12);x.stroke()}
     x.restore();
   }
+  if(what==='all')return drawBoard(c,x,W,H,S,story,D,B,M);
   if(!h)return c;
   const d=days(h),L=level(),fa=featured||latestBadge(h);
   x.textAlign='center';x.textBaseline='alphabetic';x.fillStyle=S.ink;
@@ -779,17 +881,48 @@ function drawCard(){
   x.fillStyle=S.ink;const foot=(state.handle?state.handle+'  ·  ':'')+'#MiMejorVersión';fitFont(x,foot,W*.86,story?40:32,M,'600');x.fillText(foot,W/2,H-(story?150:64));
   return c;
 }
+function drawBoard(c,x,W,H,S,story,D,B,M){
+  const L=level(),items=live().slice().sort((a,b)=>days(b)-days(a)),max=story?7:4,shown=items.slice(0,max);
+  x.textAlign='center';x.textBaseline='alphabetic';x.fillStyle=S.ink;
+  x.font='44px '+D;x.fillText('mejor versión',W/2,story?170:96);
+  fitFont(x,'MI TABLERO DE VIDA',W*.86,story?84:62,D);x.fillText('MI TABLERO DE VIDA',W/2,story?290:178);
+  const q=items.filter(i=>i.kind==='quit').length,b=items.length-q;
+  x.fillStyle=S.sub;fitFont(x,q+' '+plural(q,'vicio','vicios')+' dejando  ·  '+b+' '+plural(b,'hábito','hábitos')+' creando',W*.86,story?40:32,B,'700');
+  x.fillText(q+' '+plural(q,'vicio','vicios')+' dejando  ·  '+b+' '+plural(b,'hábito','hábitos')+' creando',W/2,story?360:232);
+  const top=story?440:280,rh=story?150:150,gap=story?22:14,pad=70;
+  shown.forEach((h,i)=>{
+    const y=top+i*(rh+gap);
+    x.fillStyle=S.row;rr(x,pad,y,W-pad*2,rh,32);x.fill();
+    const d=String(days(h));x.textAlign='center';x.fillStyle=S.ink;fitFont(x,d,170,84,D);x.fillText(d,pad+110,y+rh/2+22);
+    x.font='600 22px '+M;x.fillStyle=S.sub;x.fillText(days(h)===1?'DÍA':'DÍAS',pad+110,y+rh/2+54);
+    x.textAlign='left';x.fillStyle=S.ink;fitFont(x,h.name,W-pad*2-260,46,B,'800');x.fillText(h.name,pad+230,y+rh/2-4);
+    const tag=h.kind==='quit'?'DEJANDO':'CONSTRUYENDO';x.font='600 26px '+M;const tw=x.measureText(tag).width+32;
+    x.fillStyle=S.pill;rr(x,pad+230,y+rh/2+16,tw,42,21);x.fill();x.fillStyle=S.pillInk;x.textBaseline='middle';x.fillText(tag,pad+246,y+rh/2+38);x.textBaseline='alphabetic';
+  });
+  x.textAlign='center';
+  if(items.length>max){x.fillStyle=S.sub;x.font='700 34px '+B;x.fillText('+ '+(items.length-max)+' más',W/2,top+max*(rh+gap)+40)}
+  if(!items.length){x.fillStyle=S.sub;x.font='700 40px '+B;x.fillText('Mi camino empieza hoy',W/2,H/2)}
+  x.fillStyle=S.ink;if(story){fitFont(x,'Nivel '+(L.i+1)+' · '+L.name,W*.8,52,D);x.fillText('Nivel '+(L.i+1)+' · '+L.name,W/2,H-240)}
+  const foot=(state.handle?state.handle+'  ·  ':'')+'#MiMejorVersión';fitFont(x,foot,W*.86,story?40:30,M,'600');x.fillText(foot,W/2,H-(story?150:40));
+  return c;
+}
 function renderShare(){
+  if(what==='all'){
+    $('shareImg').src=drawCard().toDataURL('image/png');
+    const it=live(),q=it.filter(i=>i.kind==='quit'),b=it.filter(i=>i.kind!=='quit');
+    $('caption').textContent='Mi tablero de vida: '+(q.length?'dejando '+q.map(i=>i.name.replace(/^sin\s+/i,'').toLowerCase()).join(', '):'')+(q.length&&b.length?' y ':'')+(b.length?'construyendo '+b.map(i=>i.name.toLowerCase()).join(', '):'')+'. Un día a la vez, con honestidad.\n\n#MiMejorVersión #Hábitos #Constancia #Disciplina';
+    return;
+  }
   const h=active();if(!h)return;
   $('shareImg').src=drawCard().toDataURL('image/png');
   const d=days(h),fa=featured||latestBadge(h);
   $('caption').textContent=d+' '+plural(d,'día','días')+' siendo mi mejor versión: '+h.name.toLowerCase()+(fa?'. Desbloqueé «'+fa.name+'»':'')+'. Sin trampas: aquí la honestidad es parte del reto.\n\n#MiMejorVersión #Hábitos #Constancia'+(h.kind==='quit'?' #Reto':' #Disciplina');
 }
 function scheduleShare(){clearTimeout(shareT);shareT=setTimeout(renderShare,fontsReady?50:400)}
-segBind('fmtSeg',v=>{fmt=v;renderShare()});segBind('styleSeg',v=>{sty=v;renderShare()});
+segBind('whatSeg',v=>{what=v;renderShare()});segBind('fmtSeg',v=>{fmt=v;renderShare()});segBind('styleSeg',v=>{sty=v;renderShare()});
 $('saveImg').onclick=async()=>{
   const h=active();if(!h)return;if(needReal())return;
-  const data=drawCard().toDataURL('image/png');const name='mejor-version-'+days(h)+'-dias-'+fmt+'.png';
+  const data=drawCard().toDataURL('image/png');const name=what==='all'?'mejor-version-tablero-'+fmt+'.png':'mejor-version-'+days(h)+'-dias-'+fmt+'.png';
   if(NATIVE&&P.Filesystem&&P.Share){
     try{
       const w=await P.Filesystem.writeFile({path:name,data:data.split(',')[1],directory:'CACHE'});
@@ -837,16 +970,16 @@ async function scheduleReminders(){
     const pend=await LN.getPending();
     if(pend&&pend.notifications&&pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
     const r=rem(),list=[],now=Date.now();
-    const allDone=state.habits.length>0&&state.habits.every(doneToday);
+    const allDone=live().length>0&&live().every(doneToday);
     for(let i=0;i<21;i++){
       const base=new Date();base.setDate(base.getDate()+i);
       if(r.quote){const [h,m]=hm(r.quoteTime);const at=new Date(base);at.setHours(h,m,0,0);
         if(at.getTime()>now){const idx=Math.floor(new Date(at.getFullYear(),at.getMonth(),at.getDate(),12).getTime()/DAY)%QUOTES.length;
           list.push({id:1000+i,title:'Tu frase de hoy',body:QUOTES[idx],largeBody:QUOTES[idx],schedule:{at,allowWhileIdle:true}})}}
-      if(r.check&&state.habits.length){const [h,m]=hm(r.checkTime);const at=new Date(base);at.setHours(h,m,0,0);
+      if(r.check&&live().length){const [h,m]=hm(r.checkTime);const at=new Date(base);at.setHours(h,m,0,0);
         if(at.getTime()>now&&!(i===0&&allDone)){
           let body='Marca tus check-ins de hoy. Solo cuenta si es verdad.';
-          if(i===0){const pend=state.habits.filter(x=>!doneToday(x)).map(x=>x.name);if(pend.length)body='Te falta: '+pend.slice(0,3).join(', ')+(pend.length>3?'…':'')+'. Solo cuenta si es verdad.'}
+          if(i===0){const pend=live().filter(x=>!doneToday(x)).map(x=>x.name);if(pend.length)body='Te falta: '+pend.slice(0,3).join(', ')+(pend.length>3?'…':'')+'. Solo cuenta si es verdad.'}
           list.push({id:2000+i,title:'¿Fuiste tu mejor versión hoy?',body,largeBody:body,schedule:{at,allowWhileIdle:true}})}}
     }
     if(list.length)await LN.schedule({notifications:list});
@@ -893,7 +1026,7 @@ async function boot(){
   if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load('100px "Dela Gothic One"'),document.fonts.load('700 40px "Figtree"'),document.fonts.load('600 40px "IBM Plex Mono"')]).then(()=>{fontsReady=true;renderShare()}).catch(()=>{})}
   if(NATIVE&&P.App){
     P.App.addListener('backButton',()=>{
-      const open=['achModal','pactModal','newModal'].find(id=>!$(id).hidden);
+      const open=['achModal','pactModal','newModal','planModal'].find(id=>!$(id).hidden);
       if(open){if(open==='achModal')$('mClose').click();else closeModal(open);return}
       if($('settings').open){$('settings').open=false;return}
       P.App.minimizeApp();

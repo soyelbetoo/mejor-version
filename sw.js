@@ -1,6 +1,6 @@
 // Mejor Versión — funciona sin internet una vez abierta.
 // Cuando cambies la app, sube este número (v1 -> v2) para que los teléfonos tomen la nueva versión.
-const CACHE = 'mejor-version-v1';
+const CACHE = 'mejor-version-v2';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png',
