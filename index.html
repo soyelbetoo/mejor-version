@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <title>Mejor Versión</title>
-<meta name="theme-color" content="#1FB57D">
+<meta name="theme-color" content="#1B263B">
 <meta name="description" content="Deja vicios y crea hábitos con rachas, logros y un pacto de honestidad.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
@@ -30,21 +30,26 @@ body{margin:0}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 /* Layout: one-column mobile app (max 620px): quote → your streaks list → active streak hero → actions → week → numbers → badges → share studio → pact + settings */
 :root{
-  --bg:#E6F2EB; --surface:#FFFFFF; --surface-2:#F2F8F4; --ink:#10231A; --muted:#58705F; --line:#CFE2D6;
-  --mint:#1FB57D; --mint-soft:#C9F0DD; --coral:#FF5A4E; --coral-soft:#FFE0DC; --butter:#FFC933; --butter-soft:#FFF1C4; --sky:#4C9BFF; --sky-soft:#DCEBFF;
-  --on-accent:#10231A; --shadow:0 1px 0 rgba(16,35,26,.06),0 8px 24px -12px rgba(16,35,26,.25);
+  /* Paleta: ink-black #0D1B2A · prussian-blue #1B263B · dusk-blue #415A77 · dusty-denim #778DA9 · alabaster-grey #E0E1DD
+     (los nombres mint/coral/butter/sky son roles: principal, dejar, destacar, cuarto color) */
+  --bg:#E0E1DD; --surface:#F4F4F1; --surface-2:#E9EBE8; --ink:#0D1B2A; --muted:#415A77; --line:#C6CDD5;
+  --mint:#1B263B; --mint-soft:#D3D9E1; --coral:#415A77; --coral-soft:#D7DDE5; --butter:#778DA9; --butter-soft:#CCD5E0; --sky:#0D1B2A; --sky-soft:#D5DCE4;
+  --on-mint:#E0E1DD; --on-coral:#F4F4F1; --on-butter:#0D1B2A; --on-sky:#E0E1DD;
+  --on-accent:#E0E1DD; --shadow:0 1px 0 rgba(13,27,42,.06),0 8px 24px -12px rgba(13,27,42,.3);
   --f-display:"Dela Gothic One","Arial Black",Impact,system-ui,sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0D1813; --surface:#15241C; --surface-2:#1B2E24; --ink:#E8F4EC; --muted:#93AE9E; --line:#27402F;
-  --mint:#38D99A; --mint-soft:#163B2A; --coral:#FF6F63; --coral-soft:#3E1F1C; --butter:#FFD454; --butter-soft:#3A3217; --sky:#6DAEFF; --sky-soft:#18293F;
-  --on-accent:#0D1813; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}}
+  --bg:#0D1B2A; --surface:#1B263B; --surface-2:#233149; --ink:#E0E1DD; --muted:#9AABC2; --line:#2E3F5B;
+  --mint:#E0E1DD; --mint-soft:#2A3A57; --coral:#415A77; --coral-soft:#26344D; --butter:#778DA9; --butter-soft:#2C3D5A; --sky:#A9B8CC; --sky-soft:#24334D;
+  --on-mint:#0D1B2A; --on-coral:#E0E1DD; --on-butter:#0D1B2A; --on-sky:#0D1B2A;
+  --on-accent:#0D1B2A; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0D1813; --surface:#15241C; --surface-2:#1B2E24; --ink:#E8F4EC; --muted:#93AE9E; --line:#27402F;
-  --mint:#38D99A; --mint-soft:#163B2A; --coral:#FF6F63; --coral-soft:#3E1F1C; --butter:#FFD454; --butter-soft:#3A3217; --sky:#6DAEFF; --sky-soft:#18293F;
-  --on-accent:#0D1813; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}
+  --bg:#0D1B2A; --surface:#1B263B; --surface-2:#233149; --ink:#E0E1DD; --muted:#9AABC2; --line:#2E3F5B;
+  --mint:#E0E1DD; --mint-soft:#2A3A57; --coral:#415A77; --coral-soft:#26344D; --butter:#778DA9; --butter-soft:#2C3D5A; --sky:#A9B8CC; --sky-soft:#24334D;
+  --on-mint:#0D1B2A; --on-coral:#E0E1DD; --on-butter:#0D1B2A; --on-sky:#0D1B2A;
+  --on-accent:#0D1B2A; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.7); color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:18px 60px}
@@ -60,7 +65,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-family:var(--f-display);font-size:clamp(1.1rem,5.4vw,1.4rem);letter-spacing:-.01em;display:flex;align-items:center;gap:9px;white-space:nowrap}
 .mark{width:24px;height:24px;border-radius:6px;background:var(--mint);position:relative;transform:rotate(-8deg);flex:none}
-.mark::after{content:"";position:absolute;left:50%;top:26%;width:9px;height:9px;border-left:3px solid var(--on-accent);border-top:3px solid var(--on-accent);transform:translateX(-50%) rotate(45deg)}
+.mark::after{content:"";position:absolute;left:50%;top:26%;width:9px;height:9px;border-left:3px solid var(--butter);border-top:3px solid var(--butter);transform:translateX(-50%) rotate(45deg)}
 .lvl-chip{display:flex;align-items:center;gap:8px;flex:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 6px;font-weight:700;font-size:.9rem;white-space:nowrap}
 .lvl-chip b{display:grid;place-items:center;min-width:28px;height:28px;border-radius:999px;background:var(--ink);color:var(--bg);font-family:var(--f-mono);font-size:.8rem}
 
@@ -75,7 +80,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .install-txt{display:flex;flex-direction:column;min-width:0;flex:1 1 200px;font-size:.92rem}
 .install-txt span{color:var(--muted)}
 .quote{background:var(--ink);color:var(--bg);border-radius:22px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
-.quote::after{content:"";position:absolute;right:-18px;top:-18px;width:90px;height:90px;border-radius:22px;background:var(--mint);opacity:.9;transform:rotate(18deg)}
+.quote::after{content:"";position:absolute;right:-18px;top:-18px;width:90px;height:90px;border-radius:22px;background:var(--butter);opacity:.9;transform:rotate(18deg)}
 .quote .eyebrow{color:color-mix(in srgb,var(--bg) 70%,var(--ink));position:relative;z-index:1}
 .quote blockquote{margin:0;font-size:1.18rem;font-weight:700;line-height:1.35;max-width:32ch;position:relative;z-index:1;text-wrap:pretty}
 .quote button{align-self:flex-start;background:none;border:1px solid color-mix(in srgb,var(--bg) 40%,var(--ink));color:var(--bg);border-radius:999px;padding:5px 12px;font-size:.82rem;font-weight:700;position:relative;z-index:1}
@@ -91,7 +96,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hsel{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left}
 .mono{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-size:1.1rem;flex:none;transform:rotate(-5deg);position:relative}
 .mono.quit::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;border-radius:2px;background:currentColor;opacity:.55;transform:rotate(-40deg)}
-.t0{background:var(--mint);color:var(--on-accent)} .t1{background:var(--butter);color:var(--on-accent)} .t2{background:var(--coral);color:#fff} .t3{background:var(--sky);color:var(--on-accent)}
+.t0{background:var(--mint);color:var(--on-mint)} .t1{background:var(--butter);color:var(--on-butter)} .t2{background:var(--coral);color:var(--on-coral)} .t3{background:var(--sky);color:var(--on-sky)}
 .hinfo{min-width:0;display:flex;flex-direction:column}
 .hname{font-weight:800;line-height:1.25;overflow-wrap:anywhere}
 .hmeta{font-size:.8rem;color:var(--muted);font-weight:600}
@@ -144,11 +149,11 @@ details.conquered .hlist{margin-top:10px}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn{border:0;border-radius:16px;padding:14px;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease;text-align:center}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:var(--mint);color:var(--on-accent)}
+.btn-primary{background:var(--mint);color:var(--on-mint)}
 .btn-wide{grid-column:1/-1}
 .btn-big{font-size:1.06rem;padding:16px}
 .btn-primary[disabled]{background:var(--mint-soft);color:var(--muted);cursor:default}
-.btn-coral{background:var(--coral);color:#fff}
+.btn-coral{background:var(--coral);color:var(--on-coral)}
 .btn-coral[disabled]{background:var(--coral-soft);color:var(--muted);cursor:default}
 .btn-ink{background:var(--ink);color:var(--bg)}
 .btn-ink[disabled]{opacity:.4;cursor:default}
@@ -165,7 +170,7 @@ details.conquered .hlist{margin-top:10px}
 .day{display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase}
 .dot{width:100%;max-width:40px;aspect-ratio:1;border-radius:10px;background:var(--surface-2);border:2px solid var(--line);display:grid;place-items:center;transform:rotate(-4deg)}
 .dot.on{background:var(--mint);border-color:var(--mint)}
-.dot.on::after{content:"";width:40%;height:22%;border-left:3px solid var(--on-accent);border-bottom:3px solid var(--on-accent);transform:rotate(-45deg) translate(1px,-2px)}
+.dot.on::after{content:"";width:40%;height:22%;border-left:3px solid var(--on-mint);border-bottom:3px solid var(--on-mint);transform:rotate(-45deg) translate(1px,-2px)}
 .dot.today{border-color:var(--ink);border-style:dashed}
 .dot.today.on{border-style:solid}
 
@@ -229,7 +234,7 @@ details.settings[open] summary::after{content:"–"}
 .foot{font-size:.8rem;color:var(--muted);text-align:center}
 
 /* modal */
-.modal{position:fixed;inset:0;background:rgba(8,16,12,.55);display:grid;place-items:center;padding:16px;z-index:20;overflow-y:auto}
+.modal{position:fixed;inset:0;background:rgba(13,27,42,.6);display:grid;place-items:center;padding:16px;z-index:20;overflow-y:auto}
 .modal-card{background:var(--surface);border-radius:26px;padding:24px 20px 20px;max-width:420px;width:100%;display:flex;flex-direction:column;gap:14px;animation:pop .4s cubic-bezier(.2,1.4,.4,1);max-height:calc(100vh - 32px);overflow-y:auto}
 .modal-card.center{align-items:center;text-align:center;max-width:360px}
 .modal-card .cubeb{width:110px;border-radius:24px}
@@ -274,8 +279,8 @@ details.settings[open] summary::after{content:"–"}
   <section class="card" aria-label="Tus rachas">
     <div class="card-head"><h2>Tu tablero</h2><span class="eyebrow" id="todayCount">0 / 0 hoy</span></div>
     <div class="summary">
-      <div class="sum q"><b id="sumQuit">0</b><span>vicios dejando</span></div>
-      <div class="sum b"><b id="sumBuild">0</b><span>hábitos creando</span></div>
+      <div class="sum q"><b id="sumQuit">0</b><span id="sumQuitL">vicios dejando</span></div>
+      <div class="sum b"><b id="sumBuild">0</b><span id="sumBuildL">hábitos creando</span></div>
       <div class="sum t"><b id="sumToday">0/0</b><span>check-ins hoy</span></div>
     </div>
     <div class="group q">
@@ -344,7 +349,7 @@ details.settings[open] summary::after{content:"–"}
       <div class="seg" id="fmtSeg"><button data-v="story" aria-pressed="true">Historia 9:16</button><button data-v="post" aria-pressed="false">Post 1:1</button></div>
     </div>
     <div class="field"><span class="lbl">Estilo</span>
-      <div class="seg" id="styleSeg"><button data-v="menta" aria-pressed="true">Menta</button><button data-v="coral" aria-pressed="false">Coral</button><button data-v="noche" aria-pressed="false">Noche</button><button data-v="limon" aria-pressed="false">Limón</button></div>
+      <div class="seg" id="styleSeg"><button data-v="medianoche" aria-pressed="true">Noche</button><button data-v="prusia" aria-pressed="false">Prusia</button><button data-v="denim" aria-pressed="false">Denim</button><button data-v="alabastro" aria-pressed="false">Claro</button></div>
     </div>
     <div class="field"><label for="handle">Tu usuario (opcional)</label><input id="handle" class="text-in" placeholder="@tuusuario" maxlength="30" autocomplete="off"></div>
     <div class="preview"><img id="shareImg" alt="Vista previa de la imagen para compartir"></div>
@@ -622,7 +627,7 @@ function renderAll(){
   const fill=(id,arr,empty)=>{const el=$(id);el.innerHTML='';if(!arr.length){const p=document.createElement('p');p.className='empty';p.textContent=empty;el.append(p)}arr.forEach(x=>el.append(mkRow(x)))};
   fill('hlistQuit',quits,'Ningún vicio por ahora. ¿Hay algo que quieras soltar?');
   fill('hlistBuild',builds,'Ningún hábito por ahora. ¿Qué quieres sumar a tu vida?');
-  $('sumQuit').textContent=quits.length;$('sumBuild').textContent=builds.length;$('sumToday').textContent=doneN+'/'+L2.length;
+  $('sumQuit').textContent=quits.length;$('sumBuild').textContent=builds.length;$('sumQuitL').textContent=plural(quits.length,'vicio dejando','vicios dejando');$('sumBuildL').textContent=plural(builds.length,'hábito creando','hábitos creando');$('sumToday').textContent=doneN+'/'+L2.length;
   $('todayCount').textContent=doneN+' / '+L2.length+' hoy';
   $('conquered').hidden=!conq.length;$('conqN').textContent=conq.length;
   const dl=$('hlistDone');dl.innerHTML='';
@@ -836,12 +841,12 @@ let hT;$('handle').oninput=()=>{clearTimeout(hT);hT=setTimeout(()=>{let v=$('han
 
 // ---------- share card ----------
 const STYLES={
-  menta:{row:'rgba(11,31,21,.12)',bg:'#1FB57D',ink:'#0B1F15',sub:'#0B1F15',accent:'#FFE066',deco:'rgba(255,255,255,.28)',pill:'#0B1F15',pillInk:'#FFE066'},
-  coral:{row:'rgba(255,255,255,.16)',bg:'#FF5A4E',ink:'#FFF7F0',sub:'#FFF7F0',accent:'#FFE066',deco:'rgba(255,255,255,.22)',pill:'#FFF7F0',pillInk:'#D6322A'},
-  noche:{row:'rgba(255,255,255,.07)',bg:'#0D1813',ink:'#E8F4EC',sub:'#93AE9E',accent:'#38D99A',deco:'rgba(56,217,154,.14)',pill:'#38D99A',pillInk:'#0D1813'},
-  limon:{row:'rgba(26,26,16,.1)',bg:'#FFD233',ink:'#1A1A10',sub:'#3B3A1C',accent:'#FF5A4E',deco:'rgba(255,255,255,.4)',pill:'#1A1A10',pillInk:'#FFD233'}
+  medianoche:{row:'rgba(224,225,221,.07)',bg:'#0D1B2A',ink:'#E0E1DD',sub:'#778DA9',accent:'#415A77',deco:'rgba(119,141,169,.16)',pill:'#E0E1DD',pillInk:'#0D1B2A'},
+  prusia:{row:'rgba(224,225,221,.08)',bg:'#1B263B',ink:'#E0E1DD',sub:'#A9B8CC',accent:'#778DA9',deco:'rgba(119,141,169,.2)',pill:'#778DA9',pillInk:'#0D1B2A'},
+  denim:{row:'rgba(13,27,42,.12)',bg:'#778DA9',ink:'#0D1B2A',sub:'#1B263B',accent:'#E0E1DD',deco:'rgba(224,225,221,.28)',pill:'#0D1B2A',pillInk:'#E0E1DD'},
+  alabastro:{row:'rgba(27,38,59,.08)',bg:'#E0E1DD',ink:'#0D1B2A',sub:'#415A77',accent:'#778DA9',deco:'rgba(119,141,169,.22)',pill:'#1B263B',pillInk:'#E0E1DD'}
 };
-let fmt='story',sty='menta',what='one',featured=null,shareT=null,fontsReady=false;
+let fmt='story',sty='medianoche',what='one',featured=null,shareT=null,fontsReady=false;
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 function seeded(n){let s=n;return()=>{s=(s*9301+49297)%233280;return s/233280}}
 function fitFont(x,text,max,size,family,weight){let fs=size;x.font=(weight||'')+' '+fs+'px '+family;while(x.measureText(text).width>max&&fs>20){fs-=4;x.font=(weight||'')+' '+fs+'px '+family}return fs}
